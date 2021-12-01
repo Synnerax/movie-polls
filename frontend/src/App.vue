@@ -1,12 +1,34 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
+    <h1>Movie Polls</h1>
+    <input type="text" placeholder="Search Archive">
+    <button class="login">Log In</button>
+    <button class="signup">Sign Up</button>
+    <div class="profile-access">
+    <div  class="profile-menu"></div>
+    <i>&or;</i>
+    </div>
+    <!--<router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
+    -->
   </div>
   <router-view />
 </template>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: content-box;
+}
+
+*:focus {
+  /*Removes focus from input boxes and others*/
+}
+
+body {
+  background: #dae0e6;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,9 +38,60 @@
 }
 
 #nav {
-  padding: 30px;
+  background: #fff;
+  display: flex;
+  height: 3.8rem;
+  /*justify-content: space-between;*/
+  align-items: center;
+}
+#nav > * {
+  margin: 0 .5rem;
 }
 
+#nav > h1 {
+  min-width: 10ch;
+}
+#nav > input {
+  width: 50%;
+  height: 2.5rem;
+  border-radius: 5px;
+  padding-left: 10px;
+  border: none;
+  background: #f6f7f8;
+}
+
+#nav > .login {
+  min-width: 5.5rem;
+  height: 2rem;
+  border-radius: 25px;
+  border: 2px solid #1b1eb3;
+  background: #fff;
+  font-weight: bold;
+
+}
+
+#nav > .signup {
+  min-width: 5.5rem;
+  height: 2rem;
+  border-radius: 25px;
+  background: #1b1eb3;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+}
+
+.profile-access {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 4.5rem;
+}
+.profile-menu {
+  height: 3rem;
+  width: 3rem;
+  border: 1px solid black;
+  border-radius: 99rem;
+}
 #nav a {
   font-weight: bold;
   color: #2c3e50;
