@@ -1,4 +1,5 @@
 <template>
+<section>
   <div id="nav">
     <h1>Movie Polls</h1>
     <input type="text" placeholder="Search Archive">
@@ -13,6 +14,7 @@
     -->
   </div>
   <router-view />
+</section>
 </template>
 
 <style>
