@@ -43,7 +43,7 @@ body {
   background: #fff;
   display: flex;
   height: 3.8rem;
-  /*justify-content: space-between;*/
+  justify-content: space-between;
   align-items: center;
 }
 #nav > * {
