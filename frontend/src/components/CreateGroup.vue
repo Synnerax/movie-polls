@@ -3,7 +3,7 @@
     <form @submit.prevent="onSubmit">
       <div>
         <label for="name">Group name</label>
-        <input type="text" name="name" id="">
+        <input type="text" name="name" id="" />
       </div>
 
       <button type="submit">Add Group</button>
@@ -12,21 +12,19 @@
 </template>
 
 <script>
-import { createGroup } from "../firebase-config"
-import { reactive } from "vue"
+import { createGroup } from "../firebase-config";
+import { reactive } from "vue";
 export default {
   setup() {
-      const form = reactive({ name: ""})
-      const onSubmit = async () => {
-        await createGroup({...form})
-        form.name = ''
-      }
+    const form = reactive({ name: "" });
+    const onSubmit = async () => {
+      await createGroup({ ...form });
+      form.name = "";
+    };
 
-      return { form, onSubmit }
-    }
-}
+    return { form, onSubmit };
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

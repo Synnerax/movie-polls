@@ -1,20 +1,19 @@
 <template>
-<section>
-  <div id="nav">
-    <h1>Movie Polls</h1>
-    <input type="text" placeholder="Search Archive">
-    <button class="login">Log In</button>
-    <button class="signup">Sign Up</button>
-    <div class="profile-access">
-    <div  class="profile-menu"></div>
-    <i>&or;</i>
-    </div>
-    <!--<router-link to="/">Home</router-link> |
+  <section>
+    <div id="nav">
+      <h1>Movie Polls</h1>
+      <input type="text" placeholder="Search Archive" />
+      <button class="login">Log In</button>
+      <button class="signup">Sign Up</button>
+      <div class="profile-access">
+        <div class="profile-menu"></div>
+        <i>&or;</i>
+      </div>
+      <!--<router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
-    -->
-  </div>
-  <router-view />
-</section>
+    --></div>
+    <router-view />
+  </section>
 </template>
 
 <style>
@@ -47,7 +46,7 @@ body {
   align-items: center;
 }
 #nav > * {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 #nav > h1 {
@@ -69,7 +68,6 @@ body {
   border: 2px solid #1b1eb3;
   background: #fff;
   font-weight: bold;
-
 }
 
 #nav > .signup {
