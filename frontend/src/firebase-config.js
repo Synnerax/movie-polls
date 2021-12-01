@@ -1,8 +1,15 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+//import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
+
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut
+} from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgLnvgdnFSpL8-7LUVAl24ju4z-J46hLo",
@@ -17,14 +24,15 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 console.log(db);
+const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
 //const db = firebaseApp.firestore()
 
 const groupsCollection = collection(db, "groups");
 console.log(groupsCollection);
-const projectStorage = getStorage();
+//const projectStorage = getStorage();
 export const createGroup = (group) => {
-  return groupsCollection.add(group);
+  return addDoc(groupsCollection, { group });
 };
 
 export const getGroup = async (id) => {
@@ -48,3 +56,17 @@ export const useLoadGroups = () => {
   onUnmounted(close);
   return;
 };
+
+export const logout = () => {
+  signOut(auth)
+  }
+
+const provider = new GoogleAuthProvider()
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, provider).then((result) => {
+    console.log(result)
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}

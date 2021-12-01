@@ -16,7 +16,7 @@ import { createGroup } from "../firebase-config";
 import { reactive } from "vue";
 export default {
   setup() {
-    const form = reactive({ name: "" });
+    const form = reactive({ name: "test" });
     const onSubmit = async () => {
       await createGroup({ ...form });
       form.name = "";
