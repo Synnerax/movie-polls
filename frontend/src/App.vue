@@ -53,7 +53,7 @@ body {
   align-items: center;
 }
 #nav > * {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 #nav > h1 {
@@ -75,7 +75,6 @@ body {
   border: 2px solid #1b1eb3;
   background: #fff;
   font-weight: bold;
-
 }
 
 #nav > .signup {
