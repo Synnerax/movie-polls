@@ -12,8 +12,9 @@
 </template>
 
 <script>
+ 
 import { createGroup } from "../firebase-config";
-import { reactive } from "vue";
+import { reactive } from "vue"
 export default {
   setup() {
     const form = reactive({ name: "test" });

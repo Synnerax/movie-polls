@@ -4,12 +4,12 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  signOut
-} from 'firebase/auth'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgLnvgdnFSpL8-7LUVAl24ju4z-J46hLo",
@@ -58,15 +58,16 @@ export const useLoadGroups = () => {
 };
 
 export const logout = () => {
-  signOut(auth)
-  }
+  signOut(auth);
+};
 
-const provider = new GoogleAuthProvider()
+const provider = new GoogleAuthProvider();
 export const signInWithGoogle = () => {
-  signInWithPopup(auth, provider).then((result) => {
-    console.log(result)
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-}
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
