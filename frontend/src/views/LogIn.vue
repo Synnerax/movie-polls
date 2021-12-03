@@ -8,16 +8,17 @@
       <input v-model="emailLogin" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordLogin" type="password" name="password" placeholder="Password">
+      <div @click="googleProviderSignIn" class="google-sign-up">G</div>
       <button @click.prevent="doLogin" class="submit-create-user">Continue</button>
     </form>
     <p>Don't have a account? Sign Up</p>
     </article>
-
+    <button @click="logOutUser">Log out</button>
   </section>
 </template>
 
 <script>
-import { logInWithEmailAndPassword } from "../firebase-config";
+import { logInWithEmailAndPassword, signInWithGoogle, logOut } from "../firebase-config";
 
 export default {
   name: "SignUp",
@@ -43,6 +44,13 @@ export default {
             logInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
             console.log("trying to sign in..")
          }
+      },
+      googleProviderSignIn() {
+        console.log("trying to sign in with google..")
+        signInWithGoogle()
+      },
+      logOutUser() {
+        logOut()
       }
    }
 }
@@ -112,5 +120,13 @@ export default {
     }
     
   }
+  .google-sign-up {
+        cursor: pointer;
+        margin-top: 1rem;
+        border-radius: 99rem;
+        border: 1px solid black;
+        width: 15px;
+        height: 15px;
+      }
 }
 </style>

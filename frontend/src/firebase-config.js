@@ -1,14 +1,13 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import * as firebaseui from 'firebaseui'
-import 'firebaseui/dist/firebaseui.css'
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
 
 import { 
-  getAuth, 
+  getAuth,
+  onAuthStateChanged, 
   GoogleAuthProvider, 
   signInWithPopup, 
   signOut,
@@ -34,6 +33,20 @@ const auth = getAuth(firebaseApp);
 //const db = firebaseApp.firestore()
 
 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    // ...
+    console.log("user is signed in")
+  } else {
+    // User is signed out
+    console.log("user is signed out")
+
+    // ...
+  }
+});
 //const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
   console.log("signed up with: ", email, password)
@@ -94,16 +107,35 @@ export const useLoadGroups = () => {
   return;
 };
 
-export const logout = () => {
-  signOut(auth)
-  }
 
 const provider = new GoogleAuthProvider()
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider).then((result) => {
     console.log(result)
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log("user token: ", token)
   })
   .catch((error) => {
     console.log(error)
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
   })
+}
+
+export const logOut = () => {
+  signOut(auth).then(() => {
+    // Sign-out successful.
+    console.log("signed out")
+  }).catch((error) => {
+    // An error happened.
+    console.log("not signed in")
+  });
 }

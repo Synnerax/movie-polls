@@ -8,6 +8,7 @@
       <input v-model="emailReg" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordReg" type="password" name="password" placeholder="Password">
+      <div @click="googleProviderSignUp" class="google-sign-up">G</div>
       <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
     </form>
     <p>Already got a account? Login</p>
@@ -17,7 +18,7 @@
 </template>
 
 <script>
-import { signUpWithEmailAndPassword } from "../firebase-config";
+import { signUpWithEmailAndPassword, signInWithGoogle } from "../firebase-config";
 
 export default {
   name: "SignUp",
@@ -52,6 +53,10 @@ export default {
             //alert("You are now registered");
             signUpWithEmailAndPassword(this.emailReg, this.passwordReg)
          }
+      },
+      googleProviderSignUp() {
+        console.log("trying to sign in with google..")
+        signInWithGoogle()
       }
    }
 }
@@ -99,7 +104,14 @@ export default {
           margin-bottom: 2rem;
         }
       }
-
+      .google-sign-up {
+        cursor: pointer;
+        margin-top: 1rem;
+        border-radius: 99rem;
+        border: 1px solid black;
+        width: 15px;
+        height: 15px;
+      }
       .submit-create-user {
         color: #fff;
         background-color: #007bff;
@@ -121,5 +133,7 @@ export default {
     }
     
   }
+
+  
 }
 </style>
