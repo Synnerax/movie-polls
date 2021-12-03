@@ -1,23 +1,23 @@
 <template>
   <section class="sign-up-page">
     <article class="sign-up-wrapper">
-    <h1>Sign in</h1>
+    <h1>Log In</h1>
       <form action="">
 
       
-      <input v-model="emailReg" type="text" name="Email" placeholder="Email">
+      <input v-model="emailLogin" type="text" name="Email" placeholder="Email">
 
-      <input v-model="passwordReg" type="password" name="password" placeholder="Password">
-      <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
+      <input v-model="passwordLogin" type="password" name="password" placeholder="Password">
+      <button @click.prevent="doLogin" class="submit-create-user">Continue</button>
     </form>
-    <p>Already got a account? Login</p>
+    <p>Don't have a account? Sign Up</p>
     </article>
 
   </section>
 </template>
 
 <script>
-import { signUpWithEmailAndPassword } from "../firebase-config";
+import { logInWithEmailAndPassword } from "../firebase-config";
 
 export default {
   name: "SignUp",
@@ -40,17 +40,8 @@ export default {
          if (this.emailLogin === "" || this.passwordLogin === "") {
             this.emptyFields = true;
          } else {
-            alert("You are now logged in");
-         }
-      },
-      
-      doRegister() {
-         if (this.emailReg === "" || this.passwordReg === "" ) {
-            this.emptyFields = true;
-            console.log(this.passwordReg)
-         } else {
-            //alert("You are now registered");
-            signUpWithEmailAndPassword(this.emailReg, this.passwordReg)
+            logInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
+            console.log("trying to sign in..")
          }
       }
    }

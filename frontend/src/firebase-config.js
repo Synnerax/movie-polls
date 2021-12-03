@@ -1,14 +1,19 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
+import * as firebaseui from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css'
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
+
 
 import { 
   getAuth, 
   GoogleAuthProvider, 
   signInWithPopup, 
-  signOut
+  signOut,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from 'firebase/auth'
 
 const firebaseConfig = {
@@ -28,6 +33,38 @@ const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
 //const db = firebaseApp.firestore()
 
+
+//const auth = getAuth();
+export const signUpWithEmailAndPassword = ( email, password ) => {
+  console.log("signed up with: ", email, password)
+
+  createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
+}
+
+export const logInWithEmailAndPassword = ( email, password ) => {
+  console.log("email: ", email, "password: ", password)
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    console.log("you signed in")
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+}
 const groupsCollection = collection(db, "groups");
 console.log(groupsCollection);
 //const projectStorage = getStorage();
