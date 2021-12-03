@@ -3,9 +3,10 @@
     <form @submit.prevent="onSubmit">
       <div>
         <label for="name">Group name</label>
-        <input type="text" name="name" id="" />
+        <input v-model="group.name" type="text" name="name" id="" />
+        <label for="description">description</label>
+        <input v-model="group.description" type="text" name="description" id="" />
       </div>
-
       <button type="submit">Add Group</button>
     </form>
   </section>
@@ -13,18 +14,46 @@
 
 <script>
 import { createGroup } from "../firebase-config";
-import { reactive } from "vue";
 export default {
-  setup() {
-    const form = reactive({ name: "test" });
-    const onSubmit = async () => {
-      await createGroup({ ...form });
-      form.name = "";
+   data() {
+    return {
+      group: {
+        name: "",
+        description: "",
+        published: false
+      },
+      submitted: false
     };
-
-    return { form, onSubmit };
   },
+  methods: {
+    onSubmit() {
+      var data = {
+        title: this.group.name,
+        description: this.group.description,
+        published: false
+      };
+
+      createGroup(data)
+        .then(() => {
+          console.log("Created new item successfully!");
+          this.submitted = true;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+     newGroup() {
+      this.submitted = false;
+      this.group = {
+        name: "",
+        description: "",
+        published: false
+      };
+    }
+  }
 };
+
+
 </script>
 
 <style></style>
