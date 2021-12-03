@@ -1,0 +1,139 @@
+<template>
+  <section class="sign-up-page">
+    <article class="sign-up-wrapper">
+    <h1>Sign in</h1>
+      <form action="">
+
+      
+      <input v-model="emailReg" type="text" name="Email" placeholder="Email">
+
+      <input v-model="passwordReg" type="password" name="password" placeholder="Password">
+      <div @click="googleProviderSignUp" class="google-sign-up">G</div>
+      <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
+    </form>
+    <p>Already got a account? Login</p>
+    </article>
+
+  </section>
+</template>
+
+<script>
+import { signUpWithEmailAndPassword, signInWithGoogle } from "../firebase-config";
+
+export default {
+  name: "SignUp",
+  setup() {
+    console.log("setup() in SignUp form")
+    return {}
+  },
+  data() {
+    return {
+      registerActive: false,
+      emailLogin: "",
+      passwordLogin: "",
+      emailReg: "",
+      passwordReg: "",
+      emptyFields: false
+    }
+  },
+   methods: {
+      doLogin() {
+         if (this.emailLogin === "" || this.passwordLogin === "") {
+            this.emptyFields = true;
+         } else {
+            alert("You are now logged in");
+         }
+      },
+      
+      doRegister() {
+         if (this.emailReg === "" || this.passwordReg === "" ) {
+            this.emptyFields = true;
+            console.log(this.passwordReg)
+         } else {
+            //alert("You are now registered");
+            signUpWithEmailAndPassword(this.emailReg, this.passwordReg)
+         }
+      },
+      googleProviderSignUp() {
+        console.log("trying to sign in with google..")
+        signInWithGoogle()
+      }
+   }
+}
+</script>
+
+<style lang="scss">
+
+.sign-up-page {
+  min-height: 64vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .sign-up-wrapper {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+
+    h1 {
+      text-align: left;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    form {
+      width: 100%;
+      height: 17rem;
+      width: 15rem;
+      display: flex;
+      flex-direction: column;
+
+      .input-wrapper {
+        height: 50%;
+      }
+
+      input {
+        height: 2.25rem;
+        line-height: 1.5;
+        padding: .375rem .75rem;
+        color: #495057;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+
+        &:nth-child(1) {
+          margin-bottom: 2rem;
+        }
+      }
+      .google-sign-up {
+        cursor: pointer;
+        margin-top: 1rem;
+        border-radius: 99rem;
+        border: 1px solid black;
+        width: 15px;
+        height: 15px;
+      }
+      .submit-create-user {
+        color: #fff;
+        background-color: #007bff;
+        text-align: center;
+        height: 2.5rem;
+        width: 8rem;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        margin-top: 2rem;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover {
+          border: 1px solid #007bff;
+          box-shadow: 0px 0px 10px #007bff;
+          background-color: #016cdf;
+        }
+      }
+    }
+    
+  }
+
+  
+}
+</style>

@@ -1,22 +1,27 @@
 <template>
 <section>
-  <div id="nav">
-    <h1>Movie Polls</h1>
-    <input type="text" placeholder="Search Archive">
-    <button class="login">Log In</button>
-    <button class="signup">Sign Up</button>
-    <div class="profile-access">
-    <div  class="profile-menu"></div>
-    <i>&or;</i>
-    </div>
-    <!--<router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-    -->
-  </div>
+  <NavHeader /> 
   <router-view />
 </section>
 </template>
-
+<script>
+import NavHeader from "./components/NavHeader.vue"
+export default {
+  data() {
+    return {
+      test: "data"
+    }
+  },
+  components: {
+    NavHeader
+  },
+  methods: {
+    testFunc() {
+      console.log(this.test)
+    }
+  }
+}
+</script>
 <style>
 * {
   margin: 0;
@@ -30,6 +35,7 @@
 
 body {
   background: #dae0e6;
+  
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -47,7 +53,7 @@ body {
   align-items: center;
 }
 #nav > * {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 #nav > h1 {
@@ -69,7 +75,6 @@ body {
   border: 2px solid #1b1eb3;
   background: #fff;
   font-weight: bold;
-
 }
 
 #nav > .signup {
