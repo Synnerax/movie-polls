@@ -1,6 +1,6 @@
 <template>
 <section>
-  <NavHeader /> 
+  <NavHeader :loggedIn="loggedIn"/> 
   <router-view />
 </section>
 </template>
@@ -54,6 +54,9 @@ body {
   background: #dae0e6;
   
 }
+a {
+  text-decoration: none;
+}
 #app {
   font-family: 'Oxygen', sans-serif;
   /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
@@ -61,15 +64,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  width: 100vw;
 }
 
 #nav {
   background: #fff;
   display: flex;
-  height: 3.8rem;
+  height: 8vh;
   justify-content: space-between;
   align-items: center;
   position: sticky;
+  top: 0;
 }
 #nav > * {
   margin: 0 0.5rem;
@@ -79,7 +85,7 @@ body {
   min-width: 10ch;
 }
 #nav > input {
-  width: 50%;
+  width: 55%;
   height: 2.5rem;
   border-radius: 5px;
   padding-left: 10px;
@@ -87,7 +93,13 @@ body {
   background: #f6f7f8;
 }
 
-#nav > .login {
+.menu-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 25%;
+}
+.menu-buttons > .login {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
@@ -96,7 +108,7 @@ body {
   font-weight: bold;
 }
 
-#nav > .signup {
+.menu-buttons > .signup {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;

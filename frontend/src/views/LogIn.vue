@@ -59,7 +59,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  min-height: 64vw;
+  height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
