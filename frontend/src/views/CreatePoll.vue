@@ -30,6 +30,8 @@
 </template>
 
 <script>
+//missing poll end date
+//missing vote end date
 
 export default {
   name: "new-poll",
