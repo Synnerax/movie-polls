@@ -6,11 +6,15 @@
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
+import { auth, isLoggedIn } from "./firebase-config"
+import { onAuthStateChanged } from "firebase/auth"
 export default {
   data() {
     return {
       test: "data",
       loggedIn: false,
+      user: ""
+      
     }
   },
   components: {
@@ -20,6 +24,17 @@ export default {
     testFunc() {
       console.log(this.test)
     }
+  },
+  created(){
+    onAuthStateChanged(auth, (user) => {
+      console.log("checked")
+      if(user) {
+        this.loggedIn = true
+        this.user = user.uid
+      } else {
+        this.loggedIn = false
+      }
+    })
   }
 }
 </script>

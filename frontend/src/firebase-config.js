@@ -34,6 +34,7 @@ export const auth = getAuth(firebaseApp);
 
 
 export const isLoggedIn = () => {
+  let userId = ""
   return onAuthStateChanged(auth, (user) => {
     if (user) {
       // User is signed in, see docs for a list of available properties
@@ -41,7 +42,8 @@ export const isLoggedIn = () => {
       const uid = user.uid;
       // ...
       console.log("user is signed in", uid)
-      return uid
+      userId = {...user.uid}
+      return true
     } else {
       // User is signed out
       console.log("user is signed out")
@@ -50,7 +52,7 @@ export const isLoggedIn = () => {
       return false
     }
   });
-
+  console.log("this should be userID: ", userId)
 }
 
 
