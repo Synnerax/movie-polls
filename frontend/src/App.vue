@@ -9,7 +9,8 @@ import NavHeader from "./components/NavHeader.vue"
 export default {
   data() {
     return {
-      test: "data"
+      test: "data",
+      loggedIn: false,
     }
   },
   components: {
@@ -23,6 +24,7 @@ export default {
 }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -38,7 +40,8 @@ body {
   
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Oxygen', sans-serif;
+  /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -51,6 +54,7 @@ body {
   height: 3.8rem;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
 }
 #nav > * {
   margin: 0 0.5rem;

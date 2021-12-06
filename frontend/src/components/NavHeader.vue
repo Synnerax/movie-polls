@@ -15,11 +15,25 @@
 </template>
 
 <script>
+import { isLoggedIn } from '../firebase-config'
 export default {
-  name: "navigation-header"
+  name: "navigation-header",
+  watch: {
+    async $route(to, from) {
+    // react to route changes...
+    console.log("Checking if logged in..")
+    
+    console.log(await isLoggedIn())
+    if (to.name == "Home") {
+     
+      console.log("-----try rerender", )
+    } 
+  }
+  }
 }
 </script>
 
 <style>
+
 
 </style>

@@ -1,6 +1,6 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
@@ -28,25 +28,32 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 console.log(db);
-const auth = getAuth(firebaseApp);
+export const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
 //const db = firebaseApp.firestore()
 
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    // ...
-    console.log("user is signed in")
-  } else {
-    // User is signed out
-    console.log("user is signed out")
+export const isLoggedIn = () => {
+  return onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+      // ...
+      console.log("user is signed in", uid)
+      return uid
+    } else {
+      // User is signed out
+      console.log("user is signed out")
+  
+      // ...
+      return false
+    }
+  });
 
-    // ...
-  }
-});
+}
+
+
 //const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
   console.log("signed up with: ", email, password)
@@ -79,14 +86,16 @@ export const logInWithEmailAndPassword = ( email, password ) => {
   });
 }
 const groupsCollection = collection(db, "groups");
-console.log(groupsCollection);
+
+
 //const projectStorage = getStorage();
 export const createGroup = (group) => {
   return addDoc(groupsCollection, { group });
 };
-
+console.log(groupsCollection)
 export const getGroup = async (id) => {
   const user = await groupsCollection.doc(id).get();
+  console.log(user)
   return user.exists ? user.data() : null;
 };
 
@@ -139,3 +148,9 @@ export const logOut = () => {
     console.log("not signed in")
   });
 }
+
+const loadGroups = (async () => {
+   const snapshot = await getDocs(groupsCollection)
+   return snapshot.docs.map(doc => doc.data());
+})
+loadGroups()
