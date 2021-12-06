@@ -12,7 +12,7 @@
     </div>
     </section>
     <section v-else class="menu-buttons">
-    <button class="login"><router-link to="/new-pull"> New Poll </router-link></button>
+    <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
     <button v-on:click="testFunc" class="signup"><router-link to="/groups">Groups</router-link></button>
     <div class="profile-access">
     <div  class="profile-menu"></div>
