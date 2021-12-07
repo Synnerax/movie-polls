@@ -8,7 +8,7 @@
       <input v-model="emailLogin" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordLogin" type="password" name="password" placeholder="Password">
-      <div @click="googleProviderSignIn" class="google-sign-up">G</div>
+      <img src="../assets/google.svg" @click="googleProviderSignIn" class="google-sign-up">
       <button @click.prevent="doLogin" class="submit-create-user">Continue</button>
     </form>
     <p>Don't have a account? Sign Up</p>
@@ -122,11 +122,9 @@ export default {
   }
   .google-sign-up {
         cursor: pointer;
-        margin-top: 1rem;
-        border-radius: 99rem;
-        border: 1px solid black;
-        width: 15px;
-        height: 15px;
+        margin-top: 15px;
+        width: 30px;
+
       }
 }
 </style>

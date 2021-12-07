@@ -1,6 +1,6 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, onSnapshot } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
@@ -26,7 +26,7 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+export const db = getFirestore(firebaseApp);
 console.log(db);
 export const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
@@ -65,7 +65,7 @@ export const logInWithEmailAndPassword = ( email, password ) => {
     const errorMessage = error.message;
   });
 }
-const groupsCollection = collection(db, "groups");
+export const groupsCollection = collection(db, "groups");
 
 
 //const projectStorage = getStorage();
@@ -136,3 +136,16 @@ export const loadGroups = (async () => {
    
    return groups
 })
+export const groupsFeed = () => {
+    let groups = []
+         onSnapshot(groupsCollection, (querySnapshot) => {
+            const documents = [];
+            querySnapshot.forEach((doc) => {
+                documents.push({...doc.data(), id: doc.id});
+            });
+            console.log("*********im here*******")
+            console.log(documents)
+            groups = [...documents]
+        })
+        return groups;
+}
