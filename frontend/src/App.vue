@@ -1,8 +1,6 @@
 <template>
-<section>
   <NavHeader :loggedIn="loggedIn"/> 
   <router-view :userID="user" />
-</section>
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
@@ -78,6 +76,7 @@ a {
 }
 
 #nav {
+  padding: 0.75rem 0;
   background: #fff;
   display: flex;
   height: 8vh;
@@ -90,8 +89,9 @@ a {
   margin: 0 0.5rem;
 }
 
-#nav > h1 {
-  min-width: 10ch;
+#nav > a > h1 {
+  width: 6ch;
+  color: #4547e4;
 }
 #nav > input {
   width: 55%;
@@ -147,7 +147,10 @@ a {
   font-weight: bold;
   color: #fff;
 } 
-#nav a.router-link-exact-active {
-  color: #42b983;
+@media only screen and (max-width: 725px) {
+  .menu-buttons{
+    width: 100%;
+  }
 }
+
 </style>
