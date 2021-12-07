@@ -6,18 +6,12 @@
     <section v-if="!loggedIn" class="menu-buttons">
     <button class="login"><router-link to="/login"> Login </router-link></button>
     <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
-    <div class="profile-access">
-    <div  class="profile-menu"></div>
-    <i>&or;</i>
-    </div>
+    
     </section>
     <section v-else class="menu-buttons">
     <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
     <button v-on:click="testFunc" class="signup"><router-link to="/groups">Groups</router-link></button>
-    <div class="profile-access">
-    <div  class="profile-menu"></div>
-    <i>&or;</i>
-    </div>
+    <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
     </section>
     
     <!--<router-link to="/">Home</router-link> |
@@ -28,7 +22,8 @@
 </template>
 
 <script>
-import { isLoggedIn } from '../firebase-config'
+import { auth } from "../firebase-config"
+import { signOut } from "firebase/auth"
 export default {
   name: "navigation-header",
   props: ["loggedIn"],
@@ -37,12 +32,23 @@ export default {
     // react to route changes...
     console.log("Checking if logged in..")
     
-    console.log(await isLoggedIn())
     if (to.name == "Home") {
      
       console.log("-----try rerender", )
     } 
   }
+  },
+  methods: {
+    logOut() {
+      signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log("signed out")
+      }).catch((error) => {
+        // An error happened.
+        console.log("not signed in")
+      })
+      this.$router.push("Home")
+    }
   }
 }
 </script>

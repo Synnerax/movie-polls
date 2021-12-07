@@ -33,28 +33,6 @@ export const auth = getAuth(firebaseApp);
 //const db = firebaseApp.firestore()
 
 
-export const isLoggedIn = () => {
-  let userId = ""
-  return onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid;
-      // ...
-      console.log("user is signed in", uid)
-      userId = {...user.uid}
-      return true
-    } else {
-      // User is signed out
-      console.log("user is signed out")
-  
-      // ...
-      return false
-    }
-  });
-  console.log("this should be userID: ", userId)
-}
-
 
 //const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
@@ -151,8 +129,10 @@ export const logOut = () => {
   });
 }
 
-const loadGroups = (async () => {
+export const loadGroups = (async () => {
    const snapshot = await getDocs(groupsCollection)
-   return snapshot.docs.map(doc => doc.data());
+   let groups = snapshot.docs.map(doc => doc.data())
+   console.log("look here ---- ", snapshot.docs.map(doc => doc.data()))
+   
+   return groups
 })
-loadGroups()

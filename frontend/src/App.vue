@@ -1,19 +1,20 @@
 <template>
 <section>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view />
+  <router-view :userID="user" />
 </section>
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, isLoggedIn } from "./firebase-config"
+import { auth, loadGroups } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 export default {
   data() {
     return {
       test: "data",
       loggedIn: false,
-      user: ""
+      user: "",
+      userGroups: []
       
     }
   },
@@ -31,10 +32,18 @@ export default {
       if(user) {
         this.loggedIn = true
         this.user = user.uid
+        console.log("Current user: ", user)
       } else {
         this.loggedIn = false
       }
     })
+    loadGroups().then(groups => {
+      console.log("this is groups: ", groups)
+      this.userGroups = groups
+    }).catch(error => {
+      console.log(error)
+    })
+    
   }
 }
 </script>
@@ -72,7 +81,7 @@ a {
   background: #fff;
   display: flex;
   height: 8vh;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   position: sticky;
   top: 0;
@@ -95,7 +104,7 @@ a {
 
 .menu-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   width: 25%;
 }
@@ -103,7 +112,7 @@ a {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
-  border: 2px solid #1b1eb3;
+  border: 2px solid #4547e4;
   background: #fff;
   font-weight: bold;
 }
@@ -112,7 +121,7 @@ a {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
-  background: #1b1eb3;
+  background: #4547e4;
   color: #fff;
   border: none;
   font-weight: bold;
@@ -130,11 +139,14 @@ a {
   border: 1px solid black;
   border-radius: 99rem;
 }
-#nav a {
+.login a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #4547e4;
 }
-
+.signup > a {
+  font-weight: bold;
+  color: #fff;
+} 
 #nav a.router-link-exact-active {
   color: #42b983;
 }

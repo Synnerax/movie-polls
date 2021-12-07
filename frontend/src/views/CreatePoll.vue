@@ -3,17 +3,21 @@
     <article class="new-poll">
       <div class="poll-header">
         <input v-model="pollName" type="text" name="poll-title" id="poll-title" placeholder="Title">
-        <select v-model="group" id="group-selector">
+        <select v-model="group" :disabled="isPrivate" id="group-selector">
             <option value="" disabled selected>Select Group</option>
             <option value="dummy group">Dummy group</option>
         </select>
-        <button>Push</button>
+        <button @click.prevent="onSubmitPoll">Push</button>
       </div>
       <div class="poll-body">
         <section class="add-title">
           <input v-model="movie.title" type="text" placeholder="Movie Title">
           <input v-model="movie.release" type="text" placeholder="Release Date">
           <input v-model="movie.director" type="text" placeholder="Director">
+          <section class="private-section">
+            <input v-model="isPrivate" type="checkbox" name="private" id="private-checkbox">
+            <p>Private Poll</p>
+          </section>
           <button @click.prevent="addToPoll">Add To Poll</button>
         </section>
 
@@ -44,9 +48,11 @@ export default {
         release: "",
         director: "",
       },
-      addedTitles: []
+      addedTitles: [],
+      isPrivate: false
     }
   },
+  props: ["userID"],
   methods: {
     addToPoll() {
       if(!this.movie.title || !this.movie.release || !this.movie.director) {
@@ -61,6 +67,11 @@ export default {
         }
         console.log("this is addedTitles: ", this.addedTitles)
       }
+    },
+    onSubmitPoll() {
+      const poll = {owner: this.userID ,group: this.group, pollTitle: this.pollName, private: this.private, movieList: this.addedTitles
+      }
+      console.log(poll)
     }
   }
 
@@ -68,6 +79,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .create-poll {
     background: rgb(231, 231, 231);
     width: 100vw;
@@ -112,10 +124,19 @@ export default {
           justify-content: space-between;
 
           input {
-            height: 13%;
+            //height: 13%;
             border: none;
             border-bottom: 2px solid #e5e5e5;
           }
+          .private-section {
+            display: flex;
+            align-items: center;
+
+            #private-checkbox {
+              margin-right: 10px;
+            }
+          }
+          
         }
 
         .added-titles {
