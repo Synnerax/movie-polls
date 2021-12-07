@@ -1,15 +1,21 @@
 <template>
 <section>
-  <NavHeader /> 
-  <router-view />
+  <NavHeader :loggedIn="loggedIn"/> 
+  <router-view :userID="user" />
 </section>
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
+import { auth, loadGroups } from "./firebase-config"
+import { onAuthStateChanged } from "firebase/auth"
 export default {
   data() {
     return {
-      test: "data"
+      test: "data",
+      loggedIn: false,
+      user: "",
+      userGroups: []
+      
     }
   },
   components: {
@@ -19,10 +25,30 @@ export default {
     testFunc() {
       console.log(this.test)
     }
+  },
+  created(){
+    onAuthStateChanged(auth, (user) => {
+      console.log("checked")
+      if(user) {
+        this.loggedIn = true
+        this.user = user.uid
+        console.log("Current user: ", user)
+      } else {
+        this.loggedIn = false
+      }
+    })
+    loadGroups().then(groups => {
+      console.log("this is groups: ", groups)
+      this.userGroups = groups
+    }).catch(error => {
+      console.log(error)
+    })
+    
   }
 }
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
 * {
   margin: 0;
   padding: 0;
@@ -37,20 +63,28 @@ body {
   background: #dae0e6;
   
 }
+a {
+  text-decoration: none;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Oxygen', sans-serif;
+  /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
+  width: 100vw;
 }
 
 #nav {
   background: #fff;
   display: flex;
-  height: 3.8rem;
-  justify-content: space-between;
+  height: 8vh;
+  justify-content: space-evenly;
   align-items: center;
+  position: sticky;
+  top: 0;
 }
 #nav > * {
   margin: 0 0.5rem;
@@ -60,7 +94,7 @@ body {
   min-width: 10ch;
 }
 #nav > input {
-  width: 50%;
+  width: 55%;
   height: 2.5rem;
   border-radius: 5px;
   padding-left: 10px;
@@ -68,20 +102,26 @@ body {
   background: #f6f7f8;
 }
 
-#nav > .login {
+.menu-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 25%;
+}
+.menu-buttons > .login {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
-  border: 2px solid #1b1eb3;
+  border: 2px solid #4547e4;
   background: #fff;
   font-weight: bold;
 }
 
-#nav > .signup {
+.menu-buttons > .signup {
   min-width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
-  background: #1b1eb3;
+  background: #4547e4;
   color: #fff;
   border: none;
   font-weight: bold;
@@ -99,11 +139,14 @@ body {
   border: 1px solid black;
   border-radius: 99rem;
 }
-#nav a {
+.login a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #4547e4;
 }
-
+.signup > a {
+  font-weight: bold;
+  color: #fff;
+} 
 #nav a.router-link-exact-active {
   color: #42b983;
 }

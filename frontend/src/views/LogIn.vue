@@ -59,7 +59,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  min-height: 64vw;
+  height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +101,7 @@ export default {
 
       .submit-create-user {
         color: #fff;
-        background-color: #007bff;
+        background-color: #4547e4;
         text-align: center;
         height: 2.5rem;
         width: 8rem;
@@ -112,9 +112,9 @@ export default {
         transition: 0.3s;
 
         &:hover {
-          border: 1px solid #007bff;
-          box-shadow: 0px 0px 10px #007bff;
-          background-color: #016cdf;
+          border: 1px solid #4547e4;
+          box-shadow: 0px 0px 10px #4547e4;
+          background-color: #5457e2;
         }
       }
     }
