@@ -13,12 +13,11 @@
     </form>
     <p>Don't have a account? Sign Up</p>
     </article>
-    <button @click="logOutUser">Log out</button>
   </section>
 </template>
 
 <script>
-import { logInWithEmailAndPassword, signInWithGoogle, logOut } from "../firebase-config";
+import { logInWithEmailAndPassword, signInWithGoogle } from "../firebase-config";
 
 export default {
   name: "SignUp",
@@ -48,9 +47,6 @@ export default {
       googleProviderSignIn() {
         console.log("trying to sign in with google..")
         signInWithGoogle()
-      },
-      logOutUser() {
-        logOut()
       }
    }
 }

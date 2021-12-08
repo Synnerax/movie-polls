@@ -1,6 +1,6 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, query, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, query , updateDoc, onSnapshot, arrayUnion, FieldPath } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
@@ -70,7 +70,7 @@ export const groupsCollection = collection(db, "groups");
 
 //const projectStorage = getStorage();
 export const createGroup = (group) => {
-  return addDoc(groupsCollection, { group });
+  return addDoc(groupsCollection,  group );
 };
 console.log(groupsCollection)
 export const getGroup = async (id) => {
@@ -149,3 +149,27 @@ export const groupsFeed = () => {
         })
         return groups;
 }
+
+
+
+
+
+export const joinCommunity = async (userID, community) => {
+  //const q = query(groupsCollection, where("IsPrivate", "==", false))
+  //const querySnapshot = await getDocs(q);
+  //const groupRef = []
+  const docRef = doc(db, "groups", community)
+ /* querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log("and here: ")
+    console.log(doc.id, " => ", doc.data());
+    groupRef.push(doc.data())
+    console.log("Groupref:  ", groupRef )
+  });*/
+  //const groupsCollectionRef = doc(groupsCollection, " ")
+  await updateDoc(docRef, {
+    members: arrayUnion(userID)
+  });
+  console.log("Joined as member", userID, community)
+}
+//checka detta : https://firebase.google.com/docs/firestore/query-data/queries

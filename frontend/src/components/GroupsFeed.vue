@@ -2,7 +2,7 @@
   <section class="groups-feed">
     <h1>New Groups:</h1>
     <section class="community-links">
-    <a v-for="community in communitys" :key="community.id" :href="`/group/${community.id}`">{{community.group.name}}</a>
+    <p v-for="community in communitys" :key="community.id" @click="checkOutCommunity(community.id)">{{community.name}}</p>
     </section>
   </section>
 </template>
@@ -12,7 +12,13 @@ export default {
   name: "groups-feed",
   props: [
     "communitys"
-  ]
+  ],
+  methods: {
+    checkOutCommunity(id){
+      this.$router.push({name: "Community", params: {id: id}})
+
+    }
+  }
 }
 </script>
 
