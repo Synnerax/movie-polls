@@ -1,6 +1,6 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, doc, query , updateDoc, onSnapshot, arrayUnion, FieldPath } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, query, where , updateDoc, onSnapshot, arrayUnion, FieldPath } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
@@ -14,6 +14,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from 'firebase/auth'
+import { stringify } from "@firebase/util";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgLnvgdnFSpL8-7LUVAl24ju4z-J46hLo",
@@ -66,6 +67,7 @@ export const logInWithEmailAndPassword = ( email, password ) => {
   });
 }
 export const groupsCollection = collection(db, "groups");
+export const publicGroups = query(groupsCollection, where("isPrivate", "==", false));
 
 
 //const projectStorage = getStorage();
@@ -137,21 +139,19 @@ export const loadGroups = (async () => {
    return groups
 })
 export const groupsFeed = () => {
-    let groups = []
-         onSnapshot(groupsCollection, (querySnapshot) => {
-            const documents = [];
-            querySnapshot.forEach((doc) => {
-                documents.push({...doc.data(), id: doc.id});
-            });
-            console.log("*********im here*******")
-            console.log(documents)
-            groups = [...documents]
-        })
-        return groups;
+  const q = query(groupsCollection, where("isPrivate", "==", false));
+  return new Promise((resolve, reject) => {
+    onSnapshot(q, (querySnapshot) => {
+      const documents = [];
+      querySnapshot.forEach((doc) => {
+          documents.push({...doc.data(), id: doc.id});
+      });
+      console.log("*********im here*******")
+      console.log(documents)
+      resolve(documents)
+  })
+  })      
 }
-
-
-
 
 
 export const joinCommunity = async (userID, community) => {
@@ -171,5 +171,24 @@ export const joinCommunity = async (userID, community) => {
     members: arrayUnion(userID)
   });
   console.log("Joined as member", userID, community)
+}
+export const publishPoll = async (poll, community) => {
+  //const q = query(groupsCollection, where("IsPrivate", "==", false))
+  //const querySnapshot = await getDocs(q);
+  //const groupRef = []
+  console.log("This is the BAD data: ", poll)
+  const docRef = doc(db, "groups", community)
+ /* querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log("and here: ")
+    console.log(doc.id, " => ", doc.data());
+    groupRef.push(doc.data())
+    console.log("Groupref:  ", groupRef )
+  });*/
+  //const groupsCollectionRef = doc(groupsCollection, " ")
+  await updateDoc(docRef, {
+    polls: arrayUnion(JSON.parse(JSON.stringify(poll)))
+  });
+  console.log("Published Poll To: ", community)
 }
 //checka detta : https://firebase.google.com/docs/firestore/query-data/queries

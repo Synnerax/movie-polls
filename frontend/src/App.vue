@@ -4,7 +4,7 @@
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, loadGroups, groupsCollection, db } from "./firebase-config"
+import { auth, loadGroups, publicGroups, db, groupsFeed } from "./firebase-config"
 import { onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth"
 export default {
@@ -24,7 +24,7 @@ export default {
       console.log(this.test)
     }
   },
-  created(){
+  async created(){
     onAuthStateChanged(auth, (user) => {
       console.log("checked")
       if(user) {
@@ -35,20 +35,8 @@ export default {
         this.loggedIn = false
       }
     })
-    /*
-    loadGroups().then(groups => {
-      this.userGroups = groups
-    }).catch(error => {
-      console.log(error)
-    })
-    */
-    onSnapshot(groupsCollection, (querySnapshot) => {
-            const documents = [];
-            querySnapshot.forEach((doc) => {
-                documents.push({...doc.data(), id: doc.id});
-            });
-            this.communityGroups = [...documents]
-        })
+
+    this.communityGroups = await groupsFeed()
   },
   }
 </script>
@@ -116,7 +104,8 @@ a {
   width: 25%;
 }
 .menu-buttons > .login {
-  min-width: 5.5rem;
+  min-width: 1.5rem;
+  width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
   border: 2px solid #4547e4;
@@ -125,7 +114,8 @@ a {
 }
 
 .menu-buttons > .signup {
-  min-width: 5.5rem;
+  min-width: 1.5rem;
+  width: 5.5rem;
   height: 2rem;
   border-radius: 25px;
   background: #4547e4;

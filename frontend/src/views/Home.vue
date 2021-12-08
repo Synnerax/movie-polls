@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <PollsFeed />
+    <PollsFeed :communitys="communitys"/>
     <GroupsFeed :communitys="communitys"/>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   padding: 3rem;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   row-gap: 1rem;
 }
 </style>
