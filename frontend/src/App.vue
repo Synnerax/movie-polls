@@ -1,11 +1,10 @@
 <template>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" :communitys="communityGroups" />
+  <router-view :userID="user" :communitys="feed.groups" :pollsFeed="feed.polls" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, loadGroups, publicGroups, db, groupsFeed } from "./firebase-config"
-import { onSnapshot } from "firebase/firestore";
+import { auth, initializeData ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 export default {
   data() {
@@ -13,7 +12,8 @@ export default {
       test: "data",
       loggedIn: false,
       user: "",
-      communityGroups: []
+      feed: {
+      }
     }
   },
   components: {
@@ -35,8 +35,11 @@ export default {
         this.loggedIn = false
       }
     })
+    //Promise resolve gives a object with:
+    //all groups that has isPrivate = false 
+    //all polls that should be displayed on homepage feed
+    this.feed = await initializeData()
 
-    this.communityGroups = await groupsFeed()
   },
   }
 </script>

@@ -15,6 +15,7 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth'
 import { stringify } from "@firebase/util";
+import { compile } from "@vue/compiler-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgLnvgdnFSpL8-7LUVAl24ju4z-J46hLo",
@@ -138,13 +139,44 @@ export const loadGroups = (async () => {
    
    return groups
 })
-export const groupsFeed = () => {
+export const initializeData = () => {
+  const q = query(groupsCollection, where("isPrivate", "==", false));
+  return new Promise((resolve, reject) => {
+    onSnapshot(q, (querySnapshot) => {
+      const documents = [];
+      const polls = []
+      querySnapshot.forEach((doc) => {
+          documents.push({...doc.data(), id: doc.id});
+          if(doc.data().polls.length > 0) {
+            doc.data().polls.forEach((poll) => {
+              polls.push({...poll})
+            })
+          }
+      });
+      /*documents.forEach((community) => {
+        if(community.polls.length > 0) {
+          polls.push(community.polls)
+        }
+      })*/
+      console.log(polls)
+      resolve({groups: documents, polls: polls})
+  })
+  })      
+}
+
+//Fetch Poll information for feed
+export const pollsFeed = () => {
+  //Querying to get all "groups" that are public
   const q = query(groupsCollection, where("isPrivate", "==", false));
   return new Promise((resolve, reject) => {
     onSnapshot(q, (querySnapshot) => {
       const documents = [];
       querySnapshot.forEach((doc) => {
-          documents.push({...doc.data(), id: doc.id});
+        //If statment to filter out empty "polls" arrays from the feed"
+        if(doc.data().polls.length > 0) {
+          documents.push(doc.data().polls);
+        } else {
+        }
       });
       console.log("*********im here*******")
       console.log(documents)
@@ -152,7 +184,6 @@ export const groupsFeed = () => {
   })
   })      
 }
-
 
 export const joinCommunity = async (userID, community) => {
   //const q = query(groupsCollection, where("IsPrivate", "==", false))
