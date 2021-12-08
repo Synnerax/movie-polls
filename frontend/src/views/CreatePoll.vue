@@ -5,7 +5,7 @@
         <input v-model="pollName" type="text" name="poll-title" id="poll-title" placeholder="Title">
         <select v-model="group" :disabled="isPrivate" id="group-selector">
             <option value="" disabled selected>Select Group</option>
-            <option value="dummy group">Dummy group</option>
+            <option v-for="community in communitys" :key="community.id" :value="community.id">{{community.name}}</option>
         </select>
         <button @click.prevent="onSubmitPoll">Push</button>
       </div>
@@ -36,7 +36,7 @@
 <script>
 //missing poll end date
 //missing vote end date
-
+import { publishPoll } from "../firebase-config"
 export default {
   name: "new-poll",
   data() {
@@ -52,7 +52,7 @@ export default {
       isPrivate: false
     }
   },
-  props: ["userID"],
+  props: ["userID", "communitys"],
   methods: {
     addToPoll() {
       if(!this.movie.title || !this.movie.release || !this.movie.director) {
@@ -69,9 +69,16 @@ export default {
       }
     },
     onSubmitPoll() {
-      const poll = {owner: this.userID ,group: this.group, pollTitle: this.pollName, private: this.private, movieList: this.addedTitles
+      const poll = {
+        owner: this.userID,
+        group: this.group, 
+        title: this.pollName, 
+        private: this.private, 
+        movieList: this.addedTitles, 
+        voted: []
       }
-      console.log(poll)
+      publishPoll(poll, this.group)
+      console.log("pushing to: ")
     }
   }
 
