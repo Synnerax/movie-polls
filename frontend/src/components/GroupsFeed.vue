@@ -42,6 +42,11 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 15px;
+
+      p {
+        cursor: pointer;
+        border-bottom: 2px solid #e5e5e5;
+      }
     }
   }
 </style>

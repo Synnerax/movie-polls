@@ -69,7 +69,13 @@ export default {
       }
     },
     onSubmitPoll() {
-      const poll = {owner: this.userID, group: this.group, title: this.pollName, private: this.private, movieList: this.addedTitles
+      const poll = {
+        owner: this.userID,
+        group: this.group, 
+        title: this.pollName, 
+        private: this.private, 
+        movieList: this.addedTitles, 
+        voted: []
       }
       publishPoll(poll, this.group)
       console.log("pushing to: ")
