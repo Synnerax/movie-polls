@@ -1,10 +1,11 @@
 <template>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" />
+  <router-view :userID="user" :communitys="communityGroups" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, loadGroups } from "./firebase-config"
+import { auth, loadGroups, groupsCollection, db } from "./firebase-config"
+import { onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth"
 export default {
   data() {
@@ -12,8 +13,7 @@ export default {
       test: "data",
       loggedIn: false,
       user: "",
-      userGroups: []
-      
+      communityGroups: []
     }
   },
   components: {
@@ -35,15 +35,22 @@ export default {
         this.loggedIn = false
       }
     })
+    /*
     loadGroups().then(groups => {
-      console.log("this is groups: ", groups)
       this.userGroups = groups
     }).catch(error => {
       console.log(error)
     })
-    
+    */
+    onSnapshot(groupsCollection, (querySnapshot) => {
+            const documents = [];
+            querySnapshot.forEach((doc) => {
+                documents.push({...doc.data(), id: doc.id});
+            });
+            this.communityGroups = [...documents]
+        })
+  },
   }
-}
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');

@@ -10,7 +10,7 @@
     </section>
     <section v-else class="menu-buttons">
     <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="testFunc" class="signup"><router-link to="/groups">Groups</router-link></button>
+    <button v-on:click="testFunc" class="signup"><router-link to="/new-group">Groups</router-link></button>
     <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
     </section>
     

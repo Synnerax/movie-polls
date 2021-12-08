@@ -8,7 +8,7 @@
       <input v-model="emailReg" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordReg" type="password" name="password" placeholder="Password">
-      <div @click="googleProviderSignUp" class="google-sign-up">G</div>
+      <img src="../assets/google.svg" @click="googleProviderSignIn" class="google-sign-up">
       <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
     </form>
     <p>Already got a account? Login</p>
@@ -106,15 +106,12 @@ export default {
       }
       .google-sign-up {
         cursor: pointer;
-        margin-top: 1rem;
-        border-radius: 99rem;
-        border: 1px solid black;
-        width: 15px;
-        height: 15px;
+        margin-top: 15px;
+        width: 30px;
       }
       .submit-create-user {
         color: #fff;
-        background-color: #007bff;
+        background-color: #4547e4;
         text-align: center;
         height: 2.5rem;
         width: 8rem;
@@ -125,9 +122,9 @@ export default {
         transition: 0.3s;
 
         &:hover {
-          border: 1px solid #007bff;
-          box-shadow: 0px 0px 10px #007bff;
-          background-color: #016cdf;
+          border: 1px solid #4547e4;
+          box-shadow: 0px 0px 10px #4547e4;
+          background-color: #5457e2;
         }
       }
     }

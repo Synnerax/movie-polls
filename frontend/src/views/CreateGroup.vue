@@ -17,7 +17,7 @@
         <label class="discription-label" for="description">Description</label>
         <textarea style="resize: none;" v-model="group.description" type="text" name="description" id="" />
         <div class="private-container">
-        <input v-model="group.isPublic" type="checkbox" name="private" id="private-checkbox">
+        <input v-model="group.isPrivate" type="checkbox" name="private" id="private-checkbox">
          <p>Private group</p>
          </div>
       <button class="add-button" type="submit">Add Group</button>
@@ -36,7 +36,7 @@ export default {
         owner: this.userID,
         genre: [],
         description: "",
-        isPublic: false,
+        isPrivate: false,
         members: [this.userID],
         polls: []
       },
@@ -55,7 +55,7 @@ export default {
                 owner: this.userID,
                 genre: [],
                 description: "",
-                isPublic: false,
+                isPrivate: false,
                 members: [this.userID],
                 polls: []
         }})
@@ -113,6 +113,7 @@ export default {
 }
 form {
   width: 50%;
+  min-width: 22rem;
 }
 .create-group-container {
   background: #fff;
