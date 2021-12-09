@@ -19,15 +19,23 @@ export default {
 
 <style lang="scss" scoped>
   .polls-feed {
+    flex-wrap: wrap;
+    display: flex;
     min-width: 25rem;
     width: 67vw;
-    height: 30rem;
+    min-height: 30rem;
     background: #fff;
     border-radius: 10px;
 
     .poll-wrapper {
-      margin: 2rem;
       text-align: left;
+      border: 1px solid;
+      margin: 1rem;
+      padding: 15px;
+      flex: 1 1 30%;
+      p {
+        max-width: 25ch;
+      }
     }
   }
 </style>
