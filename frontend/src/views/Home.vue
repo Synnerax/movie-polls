@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <PollsFeed :communitys="communitys"/>
+    <PollsFeed :polls="pollsFeed"/>
     <GroupsFeed :communitys="communitys"/>
   </div>
 </template>
@@ -13,7 +13,8 @@ import PollsFeed from '../components/PollsFeed.vue';
 export default {
   name: "Home",
   props: [
-    "communitys"
+    "communitys",
+    "pollsFeed"
   ],
   components: { 
     GroupsFeed,

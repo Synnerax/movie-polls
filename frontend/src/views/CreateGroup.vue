@@ -1,8 +1,8 @@
 <template>
-  <section class="group-container">
+  <section class="group-container ">
     <form @submit.prevent="onSubmit">
       <h1>Create a group!</h1>
-      <div class="create-group-container">
+      <div class="create-group-container card-border">
           <label class="label-margin" for="name">Group name</label>
         <input placeholder="Example: Movie-club" class="group-name-input" v-model="group.name" type="text" name="name" id="" />
         <div class="flex-wrapper">
@@ -115,15 +115,17 @@ form {
   width: 50%;
   min-width: 22rem;
 }
+
+form > h1 {
+  margin-bottom: 10px;
+}
 .create-group-container {
+
   background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
-  border-radius: 10px;
-  box-shadow: 1px 1px black;
   padding: 0 2rem;
 }
 label {

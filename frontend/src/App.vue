@@ -1,19 +1,20 @@
 <template>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" :communitys="communityGroups" />
+  <router-view :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, loadGroups, publicGroups, db, groupsFeed } from "./firebase-config"
-import { onSnapshot } from "firebase/firestore";
+import { auth, initializeData ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
+
 export default {
   data() {
     return {
       test: "data",
       loggedIn: false,
       user: "",
-      communityGroups: []
+      feed: {
+      }
     }
   },
   components: {
@@ -35,13 +36,22 @@ export default {
         this.loggedIn = false
       }
     })
+    //Promise resolve gives a object with:
+    //all groups that has isPrivate = false 
+    //all polls that should be displayed on homepage feed
+    this.feed = await initializeData()
 
-    this.communityGroups = await groupsFeed()
   },
   }
 </script>
-<style>
+<style lang="scss">
+@import "vue-select/src/scss/vue-select.scss";
 @import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
+
+//******V-SELECT *******
+
+
+//******************
 * {
   margin: 0;
   padding: 0;
@@ -52,8 +62,12 @@ export default {
   /*Removes focus from input boxes and others*/
 }
 
+.card-border {
+  border-radius: 10px;
+  box-shadow: 0 0 20px 8px #d0d0d0;
+}
 body {
-  background: #dae0e6;
+  background: #f7f7f8;
   
 }
 a {
