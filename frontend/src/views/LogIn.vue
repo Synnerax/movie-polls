@@ -8,17 +8,16 @@
       <input v-model="emailLogin" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordLogin" type="password" name="password" placeholder="Password">
-      <div @click="googleProviderSignIn" class="google-sign-up">G</div>
+      <img src="../assets/google.svg" @click="googleProviderSignIn" class="google-sign-up">
       <button @click.prevent="doLogin" class="submit-create-user">Continue</button>
     </form>
     <p>Don't have a account? Sign Up</p>
     </article>
-    <button @click="logOutUser">Log out</button>
   </section>
 </template>
 
 <script>
-import { logInWithEmailAndPassword, signInWithGoogle, logOut } from "../firebase-config";
+import { logInWithEmailAndPassword, signInWithGoogle } from "../firebase-config";
 
 export default {
   name: "SignUp",
@@ -48,9 +47,6 @@ export default {
       googleProviderSignIn() {
         console.log("trying to sign in with google..")
         signInWithGoogle()
-      },
-      logOutUser() {
-        logOut()
       }
    }
 }
@@ -59,7 +55,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  min-height: 64vw;
+  height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +97,7 @@ export default {
 
       .submit-create-user {
         color: #fff;
-        background-color: #007bff;
+        background-color: #4547e4;
         text-align: center;
         height: 2.5rem;
         width: 8rem;
@@ -112,9 +108,9 @@ export default {
         transition: 0.3s;
 
         &:hover {
-          border: 1px solid #007bff;
-          box-shadow: 0px 0px 10px #007bff;
-          background-color: #016cdf;
+          border: 1px solid #4547e4;
+          box-shadow: 0px 0px 10px #4547e4;
+          background-color: #5457e2;
         }
       }
     }
@@ -122,11 +118,9 @@ export default {
   }
   .google-sign-up {
         cursor: pointer;
-        margin-top: 1rem;
-        border-radius: 99rem;
-        border: 1px solid black;
-        width: 15px;
-        height: 15px;
+        margin-top: 15px;
+        width: 30px;
+
       }
 }
 </style>

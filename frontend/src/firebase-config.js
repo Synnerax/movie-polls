@@ -1,6 +1,6 @@
 //import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, query, where , updateDoc, onSnapshot, arrayUnion, FieldPath } from "firebase/firestore";
 //import { getStorage } from "firebase/storage";
 import { ref, onUnmounted } from "vue";
 
@@ -14,6 +14,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from 'firebase/auth'
+import { stringify } from "@firebase/util";
+import { compile } from "@vue/compiler-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDgLnvgdnFSpL8-7LUVAl24ju4z-J46hLo",
@@ -26,27 +28,14 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+export const db = getFirestore(firebaseApp);
 console.log(db);
-const auth = getAuth(firebaseApp);
+export const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
 //const db = firebaseApp.firestore()
 
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    // ...
-    console.log("user is signed in")
-  } else {
-    // User is signed out
-    console.log("user is signed out")
 
-    // ...
-  }
-});
 //const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
   console.log("signed up with: ", email, password)
@@ -78,15 +67,18 @@ export const logInWithEmailAndPassword = ( email, password ) => {
     const errorMessage = error.message;
   });
 }
-const groupsCollection = collection(db, "groups");
-console.log(groupsCollection);
+export const groupsCollection = collection(db, "groups");
+export const publicGroups = query(groupsCollection, where("isPrivate", "==", false));
+
+
 //const projectStorage = getStorage();
 export const createGroup = (group) => {
-  return addDoc(groupsCollection, { group });
+  return addDoc(groupsCollection,  group );
 };
-
+console.log(groupsCollection)
 export const getGroup = async (id) => {
   const user = await groupsCollection.doc(id).get();
+  console.log(user)
   return user.exists ? user.data() : null;
 };
 
@@ -139,3 +131,69 @@ export const logOut = () => {
     console.log("not signed in")
   });
 }
+
+export const loadGroups = (async () => {
+   const snapshot = await getDocs(groupsCollection)
+   let groups = snapshot.docs.map(doc => doc.data())
+   console.log("look here ---- ", snapshot.docs.map(doc => doc.data()))
+   
+   return groups
+})
+
+export const initializeData = () => {
+  const q = query(groupsCollection, where("isPrivate", "==", false));
+  return new Promise((resolve, reject) => {
+    onSnapshot(q, (querySnapshot) => {
+      const documents = [];
+      const polls = [];
+      querySnapshot.forEach((doc) => {
+          documents.push({...doc.data(), id: doc.id});
+          if(doc.data().polls.length > 0) {
+            doc.data().polls.forEach((poll) => {
+              polls.push({...poll, groupName: doc.data().name})
+            })
+          }
+      });
+      resolve({groups: documents, polls: polls})
+  })
+  })      
+}
+
+export const joinCommunity = async (userID, community) => {
+  //const q = query(groupsCollection, where("IsPrivate", "==", false))
+  //const querySnapshot = await getDocs(q);
+  //const groupRef = []
+  const docRef = doc(db, "groups", community)
+ /* querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log("and here: ")
+    console.log(doc.id, " => ", doc.data());
+    groupRef.push(doc.data())
+    console.log("Groupref:  ", groupRef )
+  });*/
+  //const groupsCollectionRef = doc(groupsCollection, " ")
+  await updateDoc(docRef, {
+    members: arrayUnion(userID)
+  });
+  console.log("Joined as member", userID, community)
+}
+export const publishPoll = async (poll, community) => {
+  //const q = query(groupsCollection, where("IsPrivate", "==", false))
+  //const querySnapshot = await getDocs(q);
+  //const groupRef = []
+  console.log("This is the BAD data: ", poll, community)
+  const docRef = doc(db, "groups", community)
+  /*querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log("and here: ")
+    console.log(doc.id, " => ", doc.data());
+    groupRef.push(doc.data())
+    console.log("Groupref:  ", groupRef )
+  });*/
+  //const groupsCollectionRef = doc(groupsCollection, " ")
+  await updateDoc(docRef, {
+    polls: arrayUnion(JSON.parse(JSON.stringify(poll)))
+  });
+  console.log("Published Poll To: ", community)
+}
+//checka detta : https://firebase.google.com/docs/firestore/query-data/queries
