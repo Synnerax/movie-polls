@@ -2,8 +2,8 @@
   <section class="polls-feed">
     <article v-for="(poll, index) in polls" :key="index" class="poll-wrapper">
       <!--This should return group name and not group ID-->
-      <p>w/{{poll.group}}</p>
-      <p>{{poll.title}}</p>
+      <p>w/{{poll.groupName}}</p>
+      <p>{{poll.title}} - Votes: {{poll.voted.length}}</p>
       <section v-for="(movie, index) in poll.movieList" :key="index">
         <p>{{movie.title}} - {{movie.release}} - {{movie.director}}</p>
       </section>

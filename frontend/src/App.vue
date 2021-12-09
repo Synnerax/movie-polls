@@ -1,11 +1,12 @@
 <template>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" :communitys="feed.groups" :pollsFeed="feed.polls" />
+  <router-view :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
 import { auth, initializeData ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
+
 export default {
   data() {
     return {
@@ -43,8 +44,14 @@ export default {
   },
   }
 </script>
-<style>
+<style lang="scss">
+@import "vue-select/src/scss/vue-select.scss";
 @import url('https://fonts.googleapis.com/css2?family=Oxygen&display=swap');
+
+//******V-SELECT *******
+
+
+//******************
 * {
   margin: 0;
   padding: 0;
@@ -55,8 +62,12 @@ export default {
   /*Removes focus from input boxes and others*/
 }
 
+.card-border {
+  border-radius: 10px;
+  box-shadow: 0 0 20px 8px #d0d0d0;
+}
 body {
-  background: #dae0e6;
+  background: #f7f7f8;
   
 }
 a {

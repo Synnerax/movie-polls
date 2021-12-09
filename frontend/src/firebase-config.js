@@ -139,48 +139,22 @@ export const loadGroups = (async () => {
    
    return groups
 })
+
 export const initializeData = () => {
   const q = query(groupsCollection, where("isPrivate", "==", false));
   return new Promise((resolve, reject) => {
     onSnapshot(q, (querySnapshot) => {
       const documents = [];
-      const polls = []
+      const polls = [];
       querySnapshot.forEach((doc) => {
           documents.push({...doc.data(), id: doc.id});
           if(doc.data().polls.length > 0) {
             doc.data().polls.forEach((poll) => {
-              polls.push({...poll})
+              polls.push({...poll, groupName: doc.data().name})
             })
           }
       });
-      /*documents.forEach((community) => {
-        if(community.polls.length > 0) {
-          polls.push(community.polls)
-        }
-      })*/
-      console.log(polls)
       resolve({groups: documents, polls: polls})
-  })
-  })      
-}
-
-//Fetch Poll information for feed
-export const pollsFeed = () => {
-  //Querying to get all "groups" that are public
-  const q = query(groupsCollection, where("isPrivate", "==", false));
-  return new Promise((resolve, reject) => {
-    onSnapshot(q, (querySnapshot) => {
-      const documents = [];
-      querySnapshot.forEach((doc) => {
-        //If statment to filter out empty "polls" arrays from the feed"
-        if(doc.data().polls.length > 0) {
-          documents.push(doc.data().polls);
-        } else {
-        }
-      });
-      console.log("*********im here*******")
-      console.log(documents)
-      resolve(documents)
   })
   })      
 }
@@ -207,9 +181,9 @@ export const publishPoll = async (poll, community) => {
   //const q = query(groupsCollection, where("IsPrivate", "==", false))
   //const querySnapshot = await getDocs(q);
   //const groupRef = []
-  console.log("This is the BAD data: ", poll)
+  console.log("This is the BAD data: ", poll, community)
   const docRef = doc(db, "groups", community)
- /* querySnapshot.forEach((doc) => {
+  /*querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
     console.log("and here: ")
     console.log(doc.id, " => ", doc.data());
