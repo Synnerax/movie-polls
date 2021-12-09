@@ -74,25 +74,34 @@ export default {
         console.log("this is addedTitles: ", this.addedTitles)
       }
     },
-    onSubmitPoll() {
-      this.updateSelectedGroup()
-      const poll = {
-        owner: this.userID,
-        group: this.group, 
-        title: this.pollName, 
-        private: this.private, 
-        movieList: this.addedTitles, 
-        voted: []
+    async onSubmitPoll() {
+      // Checks if user has set a group
+      if(this.groupName){
+        //takes the groups ID
+        const groupID = await this.updateSelectedGroup()
+         const poll = {
+          owner: this.userID,
+          group: this.group, 
+          title: this.pollName, 
+          private: this.private, 
+          movieList: this.addedTitles, 
+          voted: []
+        }
+      publishPoll(poll, groupID)
+      console.log("pushing to: ", groupID)
+
       }
-      publishPoll(poll, this.group)
-      console.log("pushing to: ")
+
     },
     updateSelectedGroup() {
-      this.communitys.forEach((community) => {
+      return new Promise ((resolve, reject) => {
+        this.communitys.forEach((community) => {
         if(community.name === this.groupName) {
           console.log("kolla här: ", community.id)
+          resolve(community.id)
         }
       })
+      }) 
     }
   },
   created() {
