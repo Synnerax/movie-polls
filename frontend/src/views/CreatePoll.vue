@@ -81,7 +81,7 @@ export default {
         const groupID = await this.updateSelectedGroup()
          const poll = {
           owner: this.userID,
-          group: this.group, 
+          group: groupID, 
           title: this.pollName, 
           private: this.private, 
           movieList: this.addedTitles, 

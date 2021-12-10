@@ -85,10 +85,9 @@ a {
 }
 
 #nav {
-  padding: 0.75rem 0;
   background: #fff;
   display: flex;
-  height: 8vh;
+  height: 10vh;
   justify-content: space-evenly;
   align-items: center;
   position: sticky;
