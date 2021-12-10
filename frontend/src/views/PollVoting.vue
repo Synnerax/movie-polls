@@ -4,7 +4,7 @@
       <h1>
         {{this.poll.title}}
       </h1>
-      <p>Votes: {{this.poll.voted.length}}</p>
+      <p>Votes: {{this.countedVotes}}</p>
     <section v-for="(movie, index) in this.poll.movieList" :key="index">
       <p>{{movie.title}}</p>
       <p>{{movie.director}}</p>
@@ -33,7 +33,7 @@ export default {
     console.log(this.poll.voted.length)
   },
   computed: {
-    countedVotes: () => {
+    countedVotes() {
       let check = this.poll ? this.poll.voted.length : "Error getting votes"
       return check
     }
