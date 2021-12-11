@@ -10,11 +10,15 @@
       <p>{{movie.director}}</p>
       <p>{{movie.release}}</p>
     </section>
+    <PieChart /> 
     </section>
   </section>
 </template>
 
 <script>
+
+import PieChart from "../components/Chart/PieChart.vue"
+
 //chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
 export default {
   data() {
@@ -37,6 +41,9 @@ export default {
       let check = this.poll ? this.poll.voted.length : "Error getting votes"
       return check
     }
+  },
+  components: {
+    PieChart
   }
 }
 </script>
