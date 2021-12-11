@@ -15,7 +15,7 @@
 </template>
 
 <script>
-
+//chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
 export default {
   data() {
     return {
