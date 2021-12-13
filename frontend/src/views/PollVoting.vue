@@ -2,18 +2,23 @@
   <section class="voting">
     <section class="poll-voting-view">
       <article class="left-section-poll-view">
+        <section>
         <h1>
         {{this.poll.title}}
         </h1>
-        <p>Votes: {{this.countedVotes}}</p>
-        <section v-for="(movie, index) in this.poll.movieList" :key="index">
+        <p>Votes: </p>
+        </section>
+
+        <section class="poll-option" v-for="(movie, index) in this.poll.movieList" :key="index">
           <p>{{movie.title}}</p>
+          <span>-</span>
           <p>{{movie.director}}</p>
+          <span>-</span>
           <p>{{movie.release}}</p>
         </section>
       </article>
       <article class="right-section-poll-view">
-        <PieChart /> 
+        <MovieChart :movies="this.poll.movieList" /> 
       </article>
 
 
@@ -23,24 +28,27 @@
 
 <script>
 
-import PieChart from "../components/Chart/PieChart.vue"
+import MovieChart from "../components/Chart/PieChart.vue"
 
 //chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
 export default {
+  name: "Voting",
   data() {
     return {
       poll: {
-        voted: [ "hej"]
-    }}
+        voted: [ ["userid", "moreVote"], ["anotheruser"], ["userthird"], ["thoruthdas"]]
+      },
+      chartData: []
+    }
   },
-  props: ["pollsFeed"],
+  props: ["pollsFeed", "userID"],
   mounted() {
     this.pollsFeed.forEach((poll) => {
       if(poll.title === this.$route.params.title) {
         this.poll = poll
       }
     })
-    console.log(this.poll.voted.length)
+
   },
   computed: {
     countedVotes() {
@@ -49,7 +57,7 @@ export default {
     }
   },
   components: {
-    PieChart
+    MovieChart
   }
 }
 </script>
@@ -77,17 +85,32 @@ export default {
   position: relative;
 
 }
-
+.poll-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 0 5px;
+  background: #f6f9fc;
+}
 .left-section-poll-view {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   height: 100%;
-  flex: 1 1 60%
+  flex: 1 1 50%;
+
+  p {
+    width: 10ch;
+  }
 }
 
 
 .right-section-poll-view {
   position: relative;
   height: 100%;
-  flex: 1 1 40%;
+  flex: 1 1 50%;
   display: flex;
   align-items: center;
   justify-content: center;

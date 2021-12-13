@@ -7,8 +7,8 @@
 
 <script>
 // @ is an alias to /src
-import GroupsFeed from '../components/GroupsFeed.vue';
-import PollsFeed from '../components/PollsFeed.vue';
+import GroupsFeed from '../components/Landing/GroupsFeed.vue';
+import PollsFeed from '../components/Landing/PollsFeed.vue';
 
 export default {
   name: "Home",
