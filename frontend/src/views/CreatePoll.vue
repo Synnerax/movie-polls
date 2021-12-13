@@ -49,6 +49,7 @@ export default {
         title: "",
         release: "",
         director: "",
+        votes: []
       },
       addedTitles: [],
       isPrivate: false,
@@ -70,6 +71,7 @@ export default {
           title: "",
           release: "",
           director: "",
+          votes: []
         }
         console.log("this is addedTitles: ", this.addedTitles)
       }
@@ -81,14 +83,13 @@ export default {
         const groupID = await this.updateSelectedGroup()
          const poll = {
           owner: this.userID,
-          group: this.group, 
+          group: groupID, 
           title: this.pollName, 
           private: this.private, 
           movieList: this.addedTitles, 
-          voted: []
         }
+
       publishPoll(poll, groupID)
-      console.log("pushing to: ", groupID)
 
       }
 
@@ -97,7 +98,6 @@ export default {
       return new Promise ((resolve, reject) => {
         this.communitys.forEach((community) => {
         if(community.name === this.groupName) {
-          console.log("kolla här: ", community.id)
           resolve(community.id)
         }
       })

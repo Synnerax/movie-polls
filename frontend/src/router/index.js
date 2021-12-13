@@ -52,6 +52,16 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Community.vue"),
   }
+  ,
+  {
+    path: "/poll/:title",
+    name: "Poll Voting",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/PollVoting.vue"),
+  }
 ];
 
 const router = createRouter({

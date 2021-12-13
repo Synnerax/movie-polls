@@ -10,7 +10,12 @@ export default {
   name: "community-view",
   props: ["userID"],
   methods: {
-    joinCommunity
+    joinCommunity,
+  },
+  data() {
+    return {
+      url: this.$route.params.id
+    }
   }
 }
 </script>
