@@ -7,7 +7,7 @@
 <script>
 import Chart from 'chart.js'
 import pieChartData from "./pieChart-data"
-
+// next step: https://www.chartjs.org/docs/latest/developers/updates.html
 export default {
   name: 'PieChart',
   data() {

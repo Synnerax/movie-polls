@@ -1,16 +1,22 @@
 <template>
   <section class="voting">
     <section class="poll-voting-view">
-      <h1>
+      <article class="left-section-poll-view">
+        <h1>
         {{this.poll.title}}
-      </h1>
-      <p>Votes: {{this.countedVotes}}</p>
-    <section v-for="(movie, index) in this.poll.movieList" :key="index">
-      <p>{{movie.title}}</p>
-      <p>{{movie.director}}</p>
-      <p>{{movie.release}}</p>
-    </section>
-    <PieChart /> 
+        </h1>
+        <p>Votes: {{this.countedVotes}}</p>
+        <section v-for="(movie, index) in this.poll.movieList" :key="index">
+          <p>{{movie.title}}</p>
+          <p>{{movie.director}}</p>
+          <p>{{movie.release}}</p>
+        </section>
+      </article>
+      <article class="right-section-poll-view">
+        <PieChart /> 
+      </article>
+
+
     </section>
   </section>
 </template>
@@ -56,6 +62,8 @@ export default {
   justify-content: center;
   align-items: center;
   .poll-voting-view {
+    display: flex;
+    position: relative;
     text-align: left;
     min-width: 15rem;
     width: 75vw;
@@ -63,5 +71,25 @@ export default {
     height: 40vw;
     background: #fff;
   }
+}
+
+.left-section-poll-view, .right-section-poll-view {
+  position: relative;
+
+}
+
+.left-section-poll-view {
+  height: 100%;
+  flex: 1 1 60%
+}
+
+
+.right-section-poll-view {
+  position: relative;
+  height: 100%;
+  flex: 1 1 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

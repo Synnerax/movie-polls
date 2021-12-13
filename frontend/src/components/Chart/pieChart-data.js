@@ -64,7 +64,6 @@ export const pieChartData = {
   data: data,
   options: {
     responsive: true,
-    
   }
 };
 
