@@ -12,23 +12,28 @@
       >
         Join community
       </button>
+      Member: {{this.memberCount}}
       </div>
 
-      <GroupsFeed class="border" :communitys="communitys"/>
+        {{this.description}}
+      
     </section>
       
   </section>
 </template>
 <script>
+
+/*
+.collection("groups")
+.where("genre", "array-contains-any", ["comedy"])
+*/
 import { joinCommunity } from "../firebase-config";
-import GroupsFeed from '../components/Landing/GroupsFeed.vue';
 import PollsFeed from '../components/Landing/PollsFeed.vue';
 
 export default {
   name: "community-view",
   props: ["userID", "communitys", ],
   components: { 
-    GroupsFeed,
     PollsFeed
     },
   methods: {
@@ -46,14 +51,35 @@ export default {
   data() {
     return {
       url: this.$route.params.id,
-      communityFeed: []
+      communityFeed: [],
+      isMember: false,
+      communityInfo: {}
     };
   },
   mounted() {
     this.pollFeed()
+    
+    this.communitys.forEach((community) => {
+      if(community.id === this.url) {
+        this.communityInfo = community
+        community.members.forEach((member) => {
+          if(member === this.userID) {
+            this.isMember = true
+          }
+        })
+      }
+    })
   },
   computed: {
-    
+    test() {
+      return this.isMember ? this.isMember : "failed to fetch"
+    },
+    description() {
+      return this.communityInfo.description ? this.communityInfo.description : "Community is missing a description"
+    },
+    memberCount() {
+      return this.communityInfo.members ? this.communityInfo.members.length : "No members"
+    }
   }
 };
 </script>
