@@ -91,6 +91,8 @@ export default {
 
       publishPoll(poll, groupID)
       this.$emit("fetchData")
+      this.$router.push({name: "Home"})
+
       }
 
     },
