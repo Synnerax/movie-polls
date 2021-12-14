@@ -207,29 +207,31 @@ export const pushVote = async (userVote, community, index, title) => {
 
   const polls = docSnap.data().polls
 
-  polls.forEach((poll) => {
-    console.log("poll.title: ", (poll.title === title))
-    if(poll.title === title) {
-      console.log("now we're in the if loop, with index: ", poll.movieList[index].votes)
-      if(poll.movieList[index].votes.length > 0) {
-        poll.movieList[index].votes.forEach((vote) => {
-          console.log("Vote: ", vote, "userVote: ",userVote)
-          if(vote === userVote) {
-            //Jumps out of loop if users id is already in votes
-            console.log("already voted!!")
-            return
-          } else {
-            poll.movieList[index].votes.push(userVote)
-            console.log("The vote should land here: ", poll.movieList[index])
-          }
-        })
-      } else {
-        poll.movieList[index].votes.push(userVote)
-      }
-
-    }
-    console.log("new poll array: ", polls)
-    updateDoc(docRef, { polls: polls })
-  })
+  return new Promise((resolve, reject) => {
+    polls.forEach((poll) => {
+      console.log("poll.title: ", (poll.title === title))
+      if(poll.title === title) {
+        console.log("now we're in the if loop, with index: ", poll.movieList[index].votes)
+        if(poll.movieList[index].votes.length > 0) {
+          poll.movieList[index].votes.forEach((vote) => {
+            console.log("Vote: ", vote, "userVote: ",userVote)
+            if(vote === userVote) {
+              //Jumps out of loop if users id is already in votes
+              console.log("already voted!!")
+              return
+            } else {
+              poll.movieList[index].votes.push(userVote)
+              console.log("The vote should land here: ", poll.movieList[index])
+            }
+          })
+        } else {
+          poll.movieList[index].votes.push(userVote)
+        }
   
+      }
+      console.log("new poll array: ", polls)
+      updateDoc(docRef, { polls: polls })
+    })
+    resolve(true)  
+  })
 }

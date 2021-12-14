@@ -1,6 +1,6 @@
 <template>
   <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
+  <router-view v-on:fetchData="fetchFeedAndGroups" :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
@@ -23,6 +23,9 @@ export default {
   methods: {
     testFunc() {
       console.log(this.test)
+    },
+    async fetchFeedAndGroups() {
+      this.feed = await initializeData()
     }
   },
   async created(){
@@ -42,6 +45,10 @@ export default {
     this.feed = await initializeData()
 
   },
+  async updated() {
+    console.log("app.vue updating now........")
+    
+  }
   }
 </script>
 <style lang="scss">

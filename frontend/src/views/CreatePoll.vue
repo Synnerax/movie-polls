@@ -90,7 +90,7 @@ export default {
         }
 
       publishPoll(poll, groupID)
-
+      this.$emit("fetchData")
       }
 
     },

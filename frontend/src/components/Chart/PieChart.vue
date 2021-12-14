@@ -1,6 +1,7 @@
 <template>
   <div class="pie-box">
     <canvas id="pie-chart"></canvas>
+    <button @click="destoryChart">click</button>
   </div>
 
 
@@ -50,9 +51,10 @@ export default {
         }
       }
     return {
-      testChart: {},
+      testChart: null,
       labelData: "New value",
       dataValue: 10,
+      chartInfo: {}
 
     }
   },
@@ -60,12 +62,21 @@ export default {
     movies: Array
   },
   beforeUpdate() {
+
     const ctx = document.getElementById('pie-chart');
     //this.testChart = new Chart(ctx, this.chart);
-    this.movies.map((movie, index) => {
+    if(this.chart.data.labels.length === 0){
+      this.movies.map((movie, index) => {
       this.chart.data.labels.push(movie.title)
       this.chart.data.datasets[0].data.push(movie.votes.length)
     })
+    } else {
+      this.chart.data.datasets[0].data = []
+      this.movies.map((movie, index) => {
+      this.chart.data.datasets[0].data.push(movie.votes.length)
+    })
+      this.testChart.update()
+    }
     this.testChart = shallowRef(
         new Chart(ctx, this.chart)
       );
@@ -94,7 +105,8 @@ export default {
 destoryChart() {
   this.testChart.destroy()
 }
-  }
+  },
+
 }
 </script>
 
