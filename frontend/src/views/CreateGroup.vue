@@ -47,7 +47,7 @@ export default {
   methods: {
     onSubmit() {
       createGroup(this.group)
-        .then(() => {
+        .then((id) => {
           console.log("Created new item successfully!");
           this.submitted = true;
              this.group = {
@@ -58,7 +58,10 @@ export default {
                 isPrivate: false,
                 members: [this.userID],
                 polls: []
-        }})
+        }
+        this.$router.push({name: "Community", params: {id: id}})
+        console.log("this should be the id: ", id)
+        })
         .catch(e => {
           console.log(e);
         });

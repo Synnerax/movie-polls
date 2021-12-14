@@ -72,8 +72,12 @@ export const publicGroups = query(groupsCollection, where("isPrivate", "==", fal
 
 
 //const projectStorage = getStorage();
-export const createGroup = (group) => {
-  return addDoc(groupsCollection,  group );
+export const createGroup = async (group) => {
+  let docRef = await addDoc(groupsCollection,  group );
+  return new Promise((resolve, reject) => {
+    resolve(docRef.id)
+  })
+    console.log("Hopefully there is a id in here: ",docRef)
 };
 console.log(groupsCollection)
 export const getGroup = async (id) => {
