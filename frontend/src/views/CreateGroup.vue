@@ -31,6 +31,7 @@ import { createGroup } from "../firebase-config";
 export default {
    data() {
     return {
+      createdID: "",
       group: {
         name: "",
         owner: this.userID,
@@ -59,8 +60,7 @@ export default {
                 members: [this.userID],
                 polls: []
         }
-        this.$router.push({name: "Community", params: {id: id}})
-        console.log("this should be the id: ", id)
+        this.updateRoute(id) 
         })
         .catch(e => {
           console.log(e);
@@ -75,6 +75,11 @@ export default {
         description: "",
         published: false
       };
+    },
+    async updateRoute(id) {
+      this.$emit("fetchData")
+      console.log("this should be the id: ", id)
+      this.$router.push({name: "Home"})
     }
   }
 };

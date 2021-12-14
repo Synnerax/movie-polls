@@ -26,6 +26,7 @@ export default {
     },
     async fetchFeedAndGroups() {
       this.feed = await initializeData()
+      console.log("newly fetched data", this.feed)
     }
   },
   async created(){
