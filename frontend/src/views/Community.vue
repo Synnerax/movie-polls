@@ -1,22 +1,9 @@
 <template>
   <section class="community-wrapper">
-    <section class="community-feed">
-      <h1>Where does it come from?</h1>
-      <p>
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It
-        has roots in a piece of classical Latin literature from 45 BC, making it
-        over 2000 years old. Richard McClintock, a Latin professor at
-        Hampden-Sydney College in Virginia, looked up one of the more obscure
-        Latin words, consectetur, from a Lorem Ipsum passage, and going through
-        the cites of the word in classical literature, discovered the
-        undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33
-        of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by
-        Cicero, written in 45 BC. This book is a treatise on the theory of
-        ethics, very popular during the Renaissance. The first line of Lorem
-        Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
-        1.10.32.
-      </p>
-    </section>
+
+      <PollsFeed :polls="this.communityFeed"/>
+
+
     <section class=".member-list">
       <div class="join-community-wrapper">       
         <button
@@ -35,20 +22,39 @@
 <script>
 import { joinCommunity } from "../firebase-config";
 import GroupsFeed from '../components/Landing/GroupsFeed.vue';
+import PollsFeed from '../components/Landing/PollsFeed.vue';
+
 export default {
   name: "community-view",
-  props: ["userID", "communitys"],
+  props: ["userID", "communitys", ],
   components: { 
     GroupsFeed,
+    PollsFeed
     },
   methods: {
     joinCommunity,
+    pollFeed() {
+      let pollList = []
+      this.communitys.map((community) => {
+        if(community.id === this.url) {
+          this.communityFeed = community.polls
+        } 
+      })
+      return pollList
+    }
   },
   data() {
     return {
       url: this.$route.params.id,
+      communityFeed: []
     };
   },
+  mounted() {
+    this.pollFeed()
+  },
+  computed: {
+    
+  }
 };
 </script>
 
@@ -103,4 +109,5 @@ h1{
   background: #fff;
   border-radius: 10px 10px 0px 0px;
 }
+
 </style>

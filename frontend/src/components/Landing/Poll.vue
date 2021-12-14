@@ -1,5 +1,5 @@
 <template>
-      <article >
+      <article class="poll-feed-item" >
       <!--This should return group name and not group ID-->
       <p>c/{{poll.groupName}}</p>
       <p>{{poll.title}} - Votes: {{votes}}</p>
@@ -30,6 +30,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.poll-feed-item {
+  p {
+    padding: 5px 15px;
+  }
+}
 </style>
