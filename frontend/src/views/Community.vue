@@ -16,6 +16,9 @@
       </div>
 
         {{this.description}}
+       <section v-for="tag in this.gerneTags" :key="tag">
+         <span>{{tag}}</span>
+       </section>
       
     </section>
       
@@ -79,6 +82,9 @@ export default {
     },
     memberCount() {
       return this.communityInfo.members ? this.communityInfo.members.length : "No members"
+    },
+    gerneTags() {
+      return this.communityInfo.genre ? this.communityInfo.genre : "No Tags"
     }
   }
 };
