@@ -15,6 +15,7 @@
           <p>{{movie.director}}</p>
           <span>-</span>
           <p>{{movie.release}}</p>
+          <button @click="voteOnTitle(index)">Vote</button>
         </section>
       </article>
       <article class="right-section-poll-view">
@@ -29,7 +30,7 @@
 <script>
 
 import MovieChart from "../components/Chart/PieChart.vue"
-
+import { pushVote } from "../firebase-config"
 //chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
 export default {
   name: "Voting",
@@ -58,6 +59,12 @@ export default {
   },
   components: {
     MovieChart
+  },
+  methods: {
+    voteOnTitle(index) {
+      pushVote(this.userID, this.poll.group, index, this.poll.title)
+      console.log("the user: ", this.userID, "The group:", this.poll, "index: ", index)
+    }
   }
 }
 </script>
