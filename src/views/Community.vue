@@ -1,10 +1,7 @@
 <template>
   <section class="community-wrapper">
-
       <PollsFeed :polls="this.communityFeed"/>
-
-
-    <section class=".member-list">
+    <section class="comunity-information">
       <div class="join-community-wrapper">       
         <button
         class="join-community"
@@ -12,12 +9,19 @@
       >
         Join community
       </button>
-      Member: {{this.memberCount}}
+      Members: {{this.memberCount}}
       </div>
-
+      <div class="comunity-name">
+        {{this.communityName}}
+      </div>
+        <div class="comunity-description">
         {{this.description}}
-       <section v-for="tag in this.gerneTags" :key="tag">
+      </div>
+        
+        
+       <section class="comunity-tag" v-for="tag in this.gerneTags" :key="tag">
          <span>{{tag}}</span>
+         
        </section>
       
     </section>
@@ -77,6 +81,9 @@ export default {
     test() {
       return this.isMember ? this.isMember : "failed to fetch"
     },
+    communityName() {
+      return this.communityInfo.name ? this.communityInfo.name : "Community is missing a name"
+    },
     description() {
       return this.communityInfo.description ? this.communityInfo.description : "Community is missing a description"
     },
@@ -98,11 +105,11 @@ export default {
   flex-wrap: wrap-reverse;
   row-gap: 1rem;
 }
-.member-list {
+.comunity-information {
   align-self: flex-end;
   min-width: 15rem;
   width: 20vw;
-  height: 20rem;
+  min-height: 20rem;
   background: #fff;
   border-radius: 10px;
   padding: 1rem;
@@ -138,8 +145,26 @@ h1{
     font-weight: bold;
 }
 .join-community-wrapper {
-  background: #fff;
-  border-radius: 10px 10px 0px 0px;
+    background: #fff;
+    display: flex;
+    border-radius: 10px 10px 0px 0px;
+    flex-direction: column;
+    align-items: center;
 }
-
+.comunity-name {
+  text-align: center;
+  font-weight: bold;
+  margin: 1rem;
+  font-size: 18px;
+}
+.comunity-description {
+text-align: center;
+border-bottom: 1px solid black;
+}
+.comunity-tag {
+  display: inline-flex
+}
+span{
+  margin: 0.3rem 0.5rem;
+}
 </style>
