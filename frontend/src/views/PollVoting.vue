@@ -1,0 +1,137 @@
+<template>
+  <section class="voting">
+    <section class="poll-voting-view">
+      <article class="left-section-poll-view">
+        <section>
+        <h1>
+        {{this.poll.title}}
+        </h1>
+        <p>Votes: </p>
+        </section>
+
+        <section class="poll-option" v-for="(movie, index) in this.poll.movieList" :key="index">
+          <p>{{movie.title}}</p>
+          <span>-</span>
+          <p>{{movie.director}}</p>
+          <span>-</span>
+          <p>{{movie.release}}</p>
+          <button @click="voteOnTitle(index)">Vote</button>
+        </section>
+      </article>
+      <article class="right-section-poll-view">
+        <MovieChart :voteIndex="this.voteIndex" :movies="this.poll.movieList" /> 
+      </article>
+
+
+    </section>
+  </section>
+</template>
+
+<script>
+
+import MovieChart from "../components/Chart/PieChart.vue"
+import { pushVote } from "../firebase-config"
+//chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
+export default {
+  name: "Voting",
+  data() {
+    return {
+      poll: {
+        voted: [ ["userid", "moreVote"], ["anotheruser"], ["userthird"], ["thoruthdas"]]
+      },
+      chartData: [],
+      voteIndex: null
+    }
+  },
+  props: ["pollsFeed", "userID"],
+  mounted() {
+    this.pollsFeed.forEach((poll) => {
+      if(poll.title === this.$route.params.title) {
+        this.poll = poll
+      }
+    })
+
+  },
+  updated(){
+    this.pollsFeed.forEach((poll) => {
+      if(poll.title === this.$route.params.title) {
+        this.poll = poll
+      }
+    })
+  },
+  computed: {
+    countedVotes() {
+      let check = this.poll ? this.poll.voted.length : "Error getting votes"
+      return check
+    }
+  },
+  components: {
+    MovieChart
+  },
+  methods: {
+    async voteOnTitle(index) {
+      let data = await pushVote(this.userID, this.poll.group, index, this.poll.title)
+      console.log("and the awsome data: ", data)
+      this.voteIndex = index
+      console.log("the user: ", this.userID, "The group:", this.poll, "index: ", index)
+      this.$emit("fetchData")
+      
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+
+.voting {
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .poll-voting-view {
+    display: flex;
+    position: relative;
+    text-align: left;
+    min-width: 15rem;
+    width: 75vw;
+    min-height: 19rem;
+    height: 40vw;
+    background: #fff;
+  }
+}
+
+.left-section-poll-view, .right-section-poll-view {
+  position: relative;
+
+}
+.poll-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 0 5px;
+  background: #f6f9fc;
+}
+.left-section-poll-view {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+  flex: 1 1 50%;
+
+  p {
+    width: 10ch;
+  }
+}
+
+
+.right-section-poll-view {
+  position: relative;
+  height: 100%;
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

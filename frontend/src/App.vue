@@ -1,10 +1,16 @@
 <template>
-  <NavHeader :loggedIn="loggedIn"/> 
-  <router-view :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
+  <NavHeader :polls="feed.polls" :userID="user" :loggedIn="loggedIn"/> 
+  <router-view 
+    v-on:fetchData="fetchFeedAndGroups" 
+    v-if="feed.groups" 
+    :userID="user" 
+    :communitys="feed.groups" 
+    :pollsFeed="feed.polls"
+    :joinedCommunitys="joinedCommunitys" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, initializeData ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
+import { auth, initializeData , fetchUsersCommunitys ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 
 export default {
@@ -14,24 +20,24 @@ export default {
       loggedIn: false,
       user: "",
       feed: {
-      }
+      },
+      joinedCommunitys: []
     }
   },
   components: {
     NavHeader
   },
   methods: {
-    testFunc() {
-      console.log(this.test)
+
+    async fetchFeedAndGroups() {
+      this.feed = await initializeData()
     }
   },
   async created(){
     onAuthStateChanged(auth, (user) => {
-      console.log("checked")
       if(user) {
         this.loggedIn = true
         this.user = user.uid
-        console.log("Current user: ", user)
       } else {
         this.loggedIn = false
       }
@@ -40,7 +46,6 @@ export default {
     //all groups that has isPrivate = false 
     //all polls that should be displayed on homepage feed
     this.feed = await initializeData()
-
   },
   }
 </script>
@@ -85,10 +90,9 @@ a {
 }
 
 #nav {
-  padding: 0.75rem 0;
   background: #fff;
   display: flex;
-  height: 8vh;
+  height: 10vh;
   justify-content: space-evenly;
   align-items: center;
   position: sticky;
@@ -113,6 +117,7 @@ a {
 
 .menu-buttons {
   display: flex;
+  position: relative;
   justify-content: space-evenly;
   align-items: center;
   width: 25%;
