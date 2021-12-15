@@ -55,9 +55,6 @@ export default {
   async updated() {
     console.log("app.vue updating now........")
     
-  },
-  async mounted() {
-    this.joinedCommunitys = await fetchUsersCommunitys()
   }
   }
 </script>
