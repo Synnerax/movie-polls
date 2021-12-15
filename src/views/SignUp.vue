@@ -1,14 +1,14 @@
 <template>
   <section class="sign-up-page">
     <article class="sign-up-wrapper">
-    <h1>Sign in</h1>
+    <h1>Sign Up</h1>
       <form action="">
 
       
       <input v-model="emailReg" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordReg" type="password" name="password" placeholder="Password">
-      <img src="../assets/google.svg" @click="googleProviderSignIn" class="google-sign-up">
+      <img src="../assets/google.svg" @click="googleProviderSignUp" class="google-sign-up">
       <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
     </form>
     <p>Already got a account? Login</p>
@@ -22,6 +22,7 @@ import { signUpWithEmailAndPassword, signInWithGoogle } from "../firebase-config
 
 export default {
   name: "SignUp",
+  props: ["isLoggedIn"],
   setup() {
     console.log("setup() in SignUp form")
     return {}
@@ -58,14 +59,24 @@ export default {
         console.log("trying to sign in with google..")
         signInWithGoogle()
       }
-   }
+   },
+   watch: {
+    isLoggedIn: function(to, from) {
+    // react to route changes...
+    console.log("Checking if logged in..")
+    if(to) {
+      this.$router.push("/")
+    }
+    console.log("this is TO: ", to)
+  }
+  },
 }
 </script>
 
 <style lang="scss">
 
 .sign-up-page {
-  min-height: 64vw;
+  height: 74vw;
   display: flex;
   align-items: center;
   justify-content: center;

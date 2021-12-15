@@ -1,9 +1,11 @@
 <template>
-  <NavHeader :polls="feed.polls" :userID="user" :loggedIn="loggedIn"/> 
+  <NavHeader v-on:onSearch="updateSearch" :polls="feed.polls" :userID="user" :loggedIn="loggedIn"/> 
   <router-view 
     v-on:fetchData="fetchFeedAndGroups" 
     v-if="feed.groups" 
     :userID="user" 
+    :isLoggedIn="loggedIn"
+    :result="search"
     :communitys="feed.groups" 
     :pollsFeed="feed.polls"
     :joinedCommunitys="joinedCommunitys" />
@@ -21,7 +23,8 @@ export default {
       user: "",
       feed: {
       },
-      joinedCommunitys: []
+      joinedCommunitys: [],
+      search: null
     }
   },
   components: {
@@ -31,6 +34,12 @@ export default {
 
     async fetchFeedAndGroups() {
       this.feed = await initializeData()
+    },
+    updateSearch(input) {
+      //console.log("search input App.vue", input)
+      this.search = input
+
+      this.$router.push({name: "Search Result"})
     }
   },
   async created(){
@@ -47,6 +56,7 @@ export default {
     //all polls that should be displayed on homepage feed
     this.feed = await initializeData()
   },
+  
   }
 </script>
 <style lang="scss">
