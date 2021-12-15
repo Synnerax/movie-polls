@@ -1,7 +1,17 @@
 <template>
     <div id="nav">
     <router-link to="/"><h1>Movie Polls</h1></router-link>
-    <input type="text" placeholder="Search Archive">
+    <select v-model="selectedSearch" name="" id="">
+      <option value="polls">Poll</option>
+      <option value="name">Group</option>
+      <option value="genre">Genre</option>
+    </select>
+    <input 
+      @keyup.enter="searchInDB"
+      type="text" 
+      placeholder="Search Archive"
+      v-model="searchWord"  
+    >
     
     <section v-if="!loggedIn" class="menu-buttons">
     <button class="login"><router-link to="/login"> Login </router-link></button>
@@ -9,9 +19,14 @@
     
     </section>
     <section v-else class="menu-buttons">
+
     <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="testFunc" class="signup"><router-link to="/new-group">Groups</router-link></button>
+    <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
     <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
+    <section v-if="displayGroupOptions" class="group-options">
+      <router-link to="/new-group">Create Group</router-link>
+      <p @click="checkOutGroups">Joined Groups</p>
+    </section>
     </section>
     
     <!--<router-link to="/">Home</router-link> |
@@ -22,11 +37,19 @@
 </template>
 
 <script>
-import { auth } from "../firebase-config"
+import { auth, searchForKeyWord } from "../firebase-config"
 import { signOut } from "firebase/auth"
 export default {
   name: "navigation-header",
-  props: ["loggedIn"],
+  props: ["loggedIn", "userID", "polls"],
+  data() {
+    return {
+      displayGroupOptions: false,
+      searchWord: "",
+      selectedSearch: "",
+      searchList: [],
+    }
+  },
   watch: {
     async $route(to, from) {
     // react to route changes...
@@ -48,12 +71,44 @@ export default {
         console.log("not signed in")
       })
       this.$router.push("Home")
+    },
+    toggleGroupOptions() {
+      this.displayGroupOptions = !this.displayGroupOptions
+    },
+    checkOutGroups() {
+      this.$router.push({name: "Joined Communitys", params: {id: this.userID}})
+    },
+    async searchInDB() {
+      //console.log("Searching for ", this.searchWord, "in ", this.selectedSearch)
+      if(this.selectedSearch === "polls") {
+        this.polls.forEach((poll) => {
+          if(poll.title === this.searchWord) {
+            this.searchList.push(poll)
+          }
+        })
+      } else {
+        //let params = (this.selectedSearch === "groups") ? "==" : "array-contains-any"
+        this.searchList = await searchForKeyWord(this.searchWord, this.selectedSearch)
+      }
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 
-
+.group-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  top: 25px;
+  width: 5.5rem;
+  min-height: 4rem;
+  background: #4547e4;
+  color: #fff;
+  a {
+    color: #fff;
+  }
+}
 </style>

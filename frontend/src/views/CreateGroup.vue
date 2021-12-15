@@ -31,6 +31,7 @@ import { createGroup } from "../firebase-config";
 export default {
    data() {
     return {
+      createdID: "",
       group: {
         name: "",
         owner: this.userID,
@@ -46,8 +47,11 @@ export default {
   props: ["userID"],
   methods: {
     onSubmit() {
-      createGroup(this.group)
-        .then(() => {
+      if(this.group.name === "" || this.group.genre.length <= 0) {
+        console.log("try again madda fakka")
+      } else {
+        createGroup(this.group)
+        .then((id) => {
           console.log("Created new item successfully!");
           this.submitted = true;
              this.group = {
@@ -58,10 +62,13 @@ export default {
                 isPrivate: false,
                 members: [this.userID],
                 polls: []
-        }})
+        }
+        this.updateRoute(id) 
+        })
         .catch(e => {
           console.log(e);
         });
+      }
     },
      newGroup() {
       this.submitted = false;
@@ -72,6 +79,11 @@ export default {
         description: "",
         published: false
       };
+    },
+    async updateRoute(id) {
+      this.$emit("fetchData")
+      console.log("this should be the id: ", id)
+      this.$router.push({name: "Home"})
     }
   }
 };

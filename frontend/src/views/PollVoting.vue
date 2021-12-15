@@ -19,7 +19,7 @@
         </section>
       </article>
       <article class="right-section-poll-view">
-        <MovieChart :movies="this.poll.movieList" /> 
+        <MovieChart :voteIndex="this.voteIndex" :movies="this.poll.movieList" /> 
       </article>
 
 
@@ -39,7 +39,8 @@ export default {
       poll: {
         voted: [ ["userid", "moreVote"], ["anotheruser"], ["userthird"], ["thoruthdas"]]
       },
-      chartData: []
+      chartData: [],
+      voteIndex: null
     }
   },
   props: ["pollsFeed", "userID"],
@@ -51,6 +52,13 @@ export default {
     })
 
   },
+  updated(){
+    this.pollsFeed.forEach((poll) => {
+      if(poll.title === this.$route.params.title) {
+        this.poll = poll
+      }
+    })
+  },
   computed: {
     countedVotes() {
       let check = this.poll ? this.poll.voted.length : "Error getting votes"
@@ -61,9 +69,13 @@ export default {
     MovieChart
   },
   methods: {
-    voteOnTitle(index) {
-      pushVote(this.userID, this.poll.group, index, this.poll.title)
+    async voteOnTitle(index) {
+      let data = await pushVote(this.userID, this.poll.group, index, this.poll.title)
+      console.log("and the awsome data: ", data)
+      this.voteIndex = index
       console.log("the user: ", this.userID, "The group:", this.poll, "index: ", index)
+      this.$emit("fetchData")
+      
     }
   }
 }

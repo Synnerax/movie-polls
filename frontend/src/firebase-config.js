@@ -29,7 +29,6 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
-console.log(db);
 export const auth = getAuth(firebaseApp);
 //const firebaseApp = firebase.initializeApp(firebaseConfig)
 //const db = firebaseApp.firestore()
@@ -38,7 +37,6 @@ export const auth = getAuth(firebaseApp);
 
 //const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
-  console.log("signed up with: ", email, password)
 
   createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
@@ -54,7 +52,6 @@ export const signUpWithEmailAndPassword = ( email, password ) => {
 }
 
 export const logInWithEmailAndPassword = ( email, password ) => {
-  console.log("email: ", email, "password: ", password)
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
@@ -72,13 +69,14 @@ export const publicGroups = query(groupsCollection, where("isPrivate", "==", fal
 
 
 //const projectStorage = getStorage();
-export const createGroup = (group) => {
-  return addDoc(groupsCollection,  group );
+export const createGroup = async (group) => {
+  let docRef = await addDoc(groupsCollection,  group );
+  return new Promise((resolve, reject) => {
+    resolve(docRef.id)
+  })
 };
-console.log(groupsCollection)
 export const getGroup = async (id) => {
   const user = await groupsCollection.doc(id).get();
-  console.log(user)
   return user.exists ? user.data() : null;
 };
 
@@ -103,15 +101,12 @@ export const useLoadGroups = () => {
 const provider = new GoogleAuthProvider()
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider).then((result) => {
-    console.log(result)
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     // The signed-in user info.
     const user = result.user;
-    console.log("user token: ", token)
   })
   .catch((error) => {
-    console.log(error)
     // Handle Errors here.
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -135,7 +130,6 @@ export const logOut = () => {
 export const loadGroups = (async () => {
    const snapshot = await getDocs(groupsCollection)
    let groups = snapshot.docs.map(doc => doc.data())
-   console.log("look here ---- ", snapshot.docs.map(doc => doc.data()))
    
    return groups
 })
@@ -160,41 +154,19 @@ export const initializeData = () => {
 }
 
 export const joinCommunity = async (userID, community) => {
-  //const q = query(groupsCollection, where("IsPrivate", "==", false))
-  //const querySnapshot = await getDocs(q);
-  //const groupRef = []
+
   const docRef = doc(db, "groups", community)
- /* querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log("and here: ")
-    console.log(doc.id, " => ", doc.data());
-    groupRef.push(doc.data())
-    console.log("Groupref:  ", groupRef )
-  });*/
-  //const groupsCollectionRef = doc(groupsCollection, " ")
   await updateDoc(docRef, {
     members: arrayUnion(userID)
   });
-  console.log("Joined as member", userID, community)
 }
 export const publishPoll = async (poll, community) => {
-  //const q = query(groupsCollection, where("IsPrivate", "==", false))
-  //const querySnapshot = await getDocs(q);
-  //const groupRef = []
-  console.log("This is the BAD data: ", poll, community)
+
   const docRef = doc(db, "groups", community)
-  /*querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log("and here: ")
-    console.log(doc.id, " => ", doc.data());
-    groupRef.push(doc.data())
-    console.log("Groupref:  ", groupRef )
-  });*/
-  //const groupsCollectionRef = doc(groupsCollection, " ")
+
   await updateDoc(docRef, {
     polls: arrayUnion(JSON.parse(JSON.stringify(poll)))
   });
-  console.log("Published Poll To: ", community)
 }
 //checka detta : https://firebase.google.com/docs/firestore/query-data/queries
 
@@ -203,33 +175,67 @@ export const pushVote = async (userVote, community, index, title) => {
 
   const docRef = doc(db, "groups", community)
   const docSnap = await getDoc(docRef)
-  console.log("Group with poll: ", docSnap.data().polls)
 
   const polls = docSnap.data().polls
 
-  polls.forEach((poll) => {
-    console.log("poll.title: ", (poll.title === title))
-    if(poll.title === title) {
-      console.log("now we're in the if loop, with index: ", poll.movieList[index].votes)
-      if(poll.movieList[index].votes.length > 0) {
-        poll.movieList[index].votes.forEach((vote) => {
-          console.log("Vote: ", vote, "userVote: ",userVote)
-          if(vote === userVote) {
-            //Jumps out of loop if users id is already in votes
-            console.log("already voted!!")
-            return
-          } else {
-            poll.movieList[index].votes.push(userVote)
-            console.log("The vote should land here: ", poll.movieList[index])
-          }
-        })
-      } else {
-        poll.movieList[index].votes.push(userVote)
-      }
+  return new Promise((resolve, reject) => {
+    polls.forEach((poll) => {
+      if(poll.title === title) {
 
-    }
-    console.log("new poll array: ", polls)
-    updateDoc(docRef, { polls: polls })
+        const result = poll.movieList[index].votes.find(vote => vote === userVote);
+
+        if(!result) {
+          console.log("Added Vote")
+          poll.movieList[index].votes.push(userVote)
+          updateDoc(docRef, { polls: polls })
+
+        } else {
+          console.log("already voted!")
+          return 
+        }
+      }
+    })
+    resolve(true)  
   })
+}
+
+export const fetchUsersCommunitys = async (id) => {
+  let docsRef = query(groupsCollection, where("members", "array-contains-any", [id]))
+  let snapShot = await getDocs(docsRef)  
+  return new Promise((resolve, reject) => {
+    let communitys = []
+    snapShot.forEach((doc) => {
+    communitys.push({...doc.data(), id: doc.id})
+  })
+  resolve(communitys)
+  })
+}
+
+//Search for poll name in groups
+
+//Search for groups name
+
+//Search for all genres
+export const searchForKeyWord = async (searchWord, selectedSearch) => {
+  //let docsRef = query(groupsCollection, where(selectedSearch, params, searchWord))
+  let searchQuery
+  //let params = "array-contains-any" ? 
   
+  if(selectedSearch === "name") {
+    searchQuery = query(groupsCollection, where("name", "==", searchWord))
+  } 
+  else {
+    searchQuery = query(groupsCollection, where(selectedSearch, "array-contains-any", [searchWord]))
+  }
+  console.log("Searching in DB for :", searchWord, selectedSearch, "with params: ")
+  console.log("docsnap::: ", docSnap)
+  
+  const docSnap = await getDocs(searchQuery)
+  return new Promise((resolve, reject) => {
+    let communitys = []
+      docSnap.forEach((doc) => {
+        communitys.push({...doc.data(), id: doc.id})
+      })
+      resolve(communitys)
+  })
 }
