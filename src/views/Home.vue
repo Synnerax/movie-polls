@@ -3,7 +3,7 @@
     <PollsFeed :polls="pollsFeed"/>
     <section class="right-section">
     <GroupsFeed :communitys="communitys"/>
-        <iframe class="testing" src="https://discord.com/widget?id=920761173220139019&theme=dark"  allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        <iframe class="discord-widget" src="https://discord.com/widget?id=920761173220139019&theme=dark" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
     </section>
   </div>
 </template>
@@ -47,8 +47,8 @@ export default {
     text-align: left;
 }
 
-.testing {
+.discord-widget {
   width: 100%;
-  height: 400px;
+  height: 350px;
 }
 </style>

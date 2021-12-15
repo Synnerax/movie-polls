@@ -25,14 +25,7 @@ export default {
 <style lang="scss" scoped>
 
   .groups-feed {
-    align-self: flex-end;
-    min-width: 15rem;
-    width: 20vw;
-    min-height: 20rem;
-    background: #fff;
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: left;
+
 
     h1 {
       margin-bottom: 15px;
