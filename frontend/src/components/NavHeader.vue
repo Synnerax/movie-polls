@@ -1,7 +1,17 @@
 <template>
     <div id="nav">
     <router-link to="/"><h1>Movie Polls</h1></router-link>
-    <input type="text" placeholder="Search Archive">
+    <select v-model="selectedSearch" name="" id="">
+      <option value="polls">Poll</option>
+      <option value="name">Group</option>
+      <option value="genre">Genre</option>
+    </select>
+    <input 
+      @keyup.enter="searchInDB"
+      type="text" 
+      placeholder="Search Archive"
+      v-model="searchWord"  
+    >
     
     <section v-if="!loggedIn" class="menu-buttons">
     <button class="login"><router-link to="/login"> Login </router-link></button>
@@ -27,14 +37,17 @@
 </template>
 
 <script>
-import { auth } from "../firebase-config"
+import { auth, searchForKeyWord } from "../firebase-config"
 import { signOut } from "firebase/auth"
 export default {
   name: "navigation-header",
-  props: ["loggedIn", "userID"],
+  props: ["loggedIn", "userID", "polls"],
   data() {
     return {
-      displayGroupOptions: false
+      displayGroupOptions: false,
+      searchWord: "",
+      selectedSearch: "",
+      searchList: [],
     }
   },
   watch: {
@@ -64,6 +77,19 @@ export default {
     },
     checkOutGroups() {
       this.$router.push({name: "Joined Communitys", params: {id: this.userID}})
+    },
+    async searchInDB() {
+      //console.log("Searching for ", this.searchWord, "in ", this.selectedSearch)
+      if(this.selectedSearch === "polls") {
+        this.polls.forEach((poll) => {
+          if(poll.title === this.searchWord) {
+            this.searchList.push(poll)
+          }
+        })
+      } else {
+        //let params = (this.selectedSearch === "groups") ? "==" : "array-contains-any"
+        this.searchList = await searchForKeyWord(this.searchWord, this.selectedSearch)
+      }
     }
   }
 }

@@ -17,13 +17,23 @@
           <input v-model="movie.release" type="text" placeholder="Release Date">
           <input v-model="movie.director" type="text" placeholder="Director">
           <section class="private-section">
-            <input v-model="isPrivate" type="checkbox" name="private" id="private-checkbox">
-            <p>Private Poll</p>
+              <input v-model="expireDate" type="date" name="" id="">
           </section>
           <button @click.prevent="addToPoll">Add To Poll</button>
         </section>
         <section class="added-titles">
           <article v-for="movie in addedTitles" :key="movie.title">
+            <!-- 
+            <section>
+              <input 
+              @change="onFileSelected" 
+              type="file" 
+              name="private" 
+              accept="image/*"
+              id="private-checkbox">
+            </section>
+            -->
+
             <p>{{movie.title}}</p>
             <p>{{movie.release}}</p>
             <p>{{movie.director}}</p>
@@ -42,6 +52,11 @@ export default {
   name: "new-poll",
   data() {
     return {
+      expireDate: "yyyy/mm/dd",
+      selectedFile: null,
+      imageSource: "",
+      preview: false,
+      posterRef: "",
       groupName: "",
       pollName: "",
       group: "",
@@ -61,6 +76,11 @@ export default {
     communitys: Array
   },
   methods: {
+    onFileSelected(event) {
+      this.imageSource = URL.createObjectURL(event.target.files[0]);
+      this.preview = true;
+      this.selectedFile = event.target.files[0];
+    },
     addToPoll() {
       if(!this.movie.title || !this.movie.release || !this.movie.director) {
         console.log("missing input")
@@ -104,7 +124,8 @@ export default {
         }
       })
       }) 
-    }
+    },
+
   },
   created() {
     

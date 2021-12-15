@@ -47,7 +47,10 @@ export default {
   props: ["userID"],
   methods: {
     onSubmit() {
-      createGroup(this.group)
+      if(this.group.name === "" || this.group.genre.length <= 0) {
+        console.log("try again madda fakka")
+      } else {
+        createGroup(this.group)
         .then((id) => {
           console.log("Created new item successfully!");
           this.submitted = true;
@@ -65,6 +68,7 @@ export default {
         .catch(e => {
           console.log(e);
         });
+      }
     },
      newGroup() {
       this.submitted = false;

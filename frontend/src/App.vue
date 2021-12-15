@@ -1,5 +1,5 @@
 <template>
-  <NavHeader :userID="user" :loggedIn="loggedIn"/> 
+  <NavHeader :polls="feed.polls" :userID="user" :loggedIn="loggedIn"/> 
   <router-view 
     v-on:fetchData="fetchFeedAndGroups" 
     v-if="feed.groups" 
@@ -28,21 +28,16 @@ export default {
     NavHeader
   },
   methods: {
-    testFunc() {
-      console.log(this.test)
-    },
+
     async fetchFeedAndGroups() {
       this.feed = await initializeData()
-      console.log("newly fetched data", this.feed)
     }
   },
   async created(){
     onAuthStateChanged(auth, (user) => {
-      console.log("checked")
       if(user) {
         this.loggedIn = true
         this.user = user.uid
-        console.log("Current user: ", user)
       } else {
         this.loggedIn = false
       }
@@ -52,10 +47,6 @@ export default {
     //all polls that should be displayed on homepage feed
     this.feed = await initializeData()
   },
-  async updated() {
-    console.log("app.vue updating now........")
-    
-  }
   }
 </script>
 <style lang="scss">
