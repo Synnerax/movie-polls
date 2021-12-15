@@ -50,12 +50,41 @@ export default {
   justify-content: center;
 
   .search-result-wrapper {
-    width: 30rem;
+    //width: 30rem;
     min-height: 20rem;
     //background: #fff;
     margin-top: 3rem;
+
+    .array-result {
+      align-self: flex-end;
+      min-width: 15rem;
+      width: 20vw;
+      min-height: 20rem;
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: left;
+    
+      h1 {
+        margin-bottom: 15px;
+      }
+
+      .community-links {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        p {
+          cursor: pointer;
+          border-bottom: 2px solid #e5e5e5;
+        }
+      }
+    }
   }
   .object-result {
+    min-width: 25rem;
+    width: 62vw;
     cursor: pointer;
       text-align: left;
       border-radius: 10px;
