@@ -8,7 +8,7 @@
       <input v-model="emailReg" type="text" name="Email" placeholder="Email">
 
       <input v-model="passwordReg" type="password" name="password" placeholder="Password">
-      <img src="../assets/google.svg" @click="googleProviderSignIn" class="google-sign-up">
+      <img src="../assets/google.svg" @click="googleProviderSignUp" class="google-sign-up">
       <button @click.prevent="doRegister" class="submit-create-user">Create Account</button>
     </form>
     <p>Already got a account? Login</p>
@@ -65,7 +65,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  min-height: 64vw;
+  height: 74vw;
   display: flex;
   align-items: center;
   justify-content: center;

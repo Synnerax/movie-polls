@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     <PollsFeed :polls="pollsFeed"/>
+    <section class="right-section">
     <GroupsFeed :communitys="communitys"/>
+        <iframe class="testing" src="https://discord.com/widget?id=920761173220139019&theme=dark"  allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    </section>
   </div>
 </template>
 
@@ -31,5 +34,21 @@ export default {
   justify-content: space-between;
   flex-wrap: wrap-reverse;
   row-gap: 1rem;
+}
+
+.right-section {
+    align-self: flex-end;
+    min-width: 15rem;
+    width: 20vw;
+    min-height: 20rem;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: left;
+}
+
+.testing {
+  width: 100%;
+  height: 400px;
 }
 </style>
