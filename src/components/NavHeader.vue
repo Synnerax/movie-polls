@@ -70,7 +70,7 @@ export default {
         // An error happened.
         console.log("not signed in")
       })
-      this.$router.push("Home")
+      this.$router.push("/")
     },
     toggleGroupOptions() {
       this.displayGroupOptions = !this.displayGroupOptions
@@ -83,13 +83,16 @@ export default {
       if(this.selectedSearch === "polls") {
         this.polls.forEach((poll) => {
           if(poll.title === this.searchWord) {
-            this.searchList.push(poll)
+            this.searchList = poll
+            console.log("in the loop")
+            return
           }
         })
       } else {
         //let params = (this.selectedSearch === "groups") ? "==" : "array-contains-any"
         this.searchList = await searchForKeyWord(this.searchWord, this.selectedSearch)
       }
+      this.$emit('onSearch', this.searchList);
     }
   }
 }

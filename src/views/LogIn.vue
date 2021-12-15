@@ -25,6 +25,9 @@ export default {
     console.log("setup() in SignUp form")
     return {}
   },
+  props: [
+    "isLoggedIn"
+  ],
   data() {
     return {
       registerActive: false,
@@ -36,19 +39,31 @@ export default {
     }
   },
    methods: {
-      doLogin() {
+      async doLogin() {
          if (this.emailLogin === "" || this.passwordLogin === "") {
             this.emptyFields = true;
          } else {
             logInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
-            console.log("trying to sign in..")
+            //this.$router.push({name: "Home"})
+
          }
       },
-      googleProviderSignIn() {
-        console.log("trying to sign in with google..")
-        signInWithGoogle()
+      async googleProviderSignIn() {
+        let data = await signInWithGoogle()
+        console.log("trying to sign in with google..", data)
+        //this.$router.push({name: "Home"})
       }
-   }
+   },
+   watch: {
+    isLoggedIn: function(to, from) {
+    // react to route changes...
+    console.log("Checking if logged in..")
+    if(to) {
+      this.$router.push("/")
+    }
+    console.log("this is TO: ", to)
+  }
+  },
 }
 </script>
 
