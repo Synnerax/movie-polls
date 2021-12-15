@@ -239,3 +239,18 @@ export const pushVote = async (userVote, community, index, title) => {
     resolve(true)  
   })
 }
+
+export const fetchUsersCommunitys = async () => {
+  let docsRef = query(groupsCollection, where("members", "array-contains-any", ["quV7uwaMMvgvsqxfrdB3OJyCX7R2"]))
+  let snapShot = await getDocs(docsRef)  
+  return new Promise((resolve, reject) => {
+    let communitys = []
+    snapShot.forEach((doc) => {
+    communitys.push({...doc.data(), id: doc.id})
+
+    console.log("look here: ", doc.data())
+  })
+  resolve(communitys)
+  })
+}
+

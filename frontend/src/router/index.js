@@ -51,8 +51,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Community.vue"),
-  }
-  ,
+  },
   {
     path: "/poll/:title",
     name: "Poll Voting",
@@ -61,6 +60,15 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/PollVoting.vue"),
+  },
+  {
+    path: "/user/:id/communitys",
+    name: "Joined Communitys",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/UsersJoinedCommunitys.vue"),
   }
 ];
 

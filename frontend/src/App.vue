@@ -1,10 +1,16 @@
 <template>
-  <NavHeader :loggedIn="loggedIn"/> 
-  <router-view v-on:fetchData="fetchFeedAndGroups" :userID="user" v-if="feed.groups" :communitys="feed.groups" :pollsFeed="feed.polls" />
+  <NavHeader :userID="user" :loggedIn="loggedIn"/> 
+  <router-view 
+    v-on:fetchData="fetchFeedAndGroups" 
+    v-if="feed.groups" 
+    :userID="user" 
+    :communitys="feed.groups" 
+    :pollsFeed="feed.polls"
+    :joinedCommunitys="joinedCommunitys" />
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, initializeData ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
+import { auth, initializeData , fetchUsersCommunitys ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 
 export default {
@@ -14,7 +20,8 @@ export default {
       loggedIn: false,
       user: "",
       feed: {
-      }
+      },
+      joinedCommunitys: []
     }
   },
   components: {
@@ -49,6 +56,9 @@ export default {
   async updated() {
     console.log("app.vue updating now........")
     
+  },
+  async mounted() {
+    this.joinedCommunitys = await fetchUsersCommunitys()
   }
   }
 </script>
@@ -120,6 +130,7 @@ a {
 
 .menu-buttons {
   display: flex;
+  position: relative;
   justify-content: space-evenly;
   align-items: center;
   width: 25%;

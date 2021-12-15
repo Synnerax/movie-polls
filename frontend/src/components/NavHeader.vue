@@ -10,8 +10,12 @@
     </section>
     <section v-else class="menu-buttons">
     <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="testFunc" class="signup"><router-link to="/new-group">Groups</router-link></button>
+    <button v-on:click="toggleGroupOptions" class="signup"><router-link to="/new-group">Groups</router-link></button>
     <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
+    <section v-if="!displayGroupOptions" class="group-options">
+      <router-link to="/new-group">Create Group</router-link>
+      <p @click="checkOutGroups">Joined Groups</p>
+    </section>
     </section>
     
     <!--<router-link to="/">Home</router-link> |
@@ -26,7 +30,12 @@ import { auth } from "../firebase-config"
 import { signOut } from "firebase/auth"
 export default {
   name: "navigation-header",
-  props: ["loggedIn"],
+  props: ["loggedIn", "userID"],
+  data() {
+    return {
+      displayGroupOptions: false
+    }
+  },
   watch: {
     async $route(to, from) {
     // react to route changes...
@@ -48,12 +57,31 @@ export default {
         console.log("not signed in")
       })
       this.$router.push("Home")
+    },
+    toggleGroupOptions() {
+      this.displayGroupOptions = !this.displayGroupOptions
+    },
+    checkOutGroups() {
+      this.$router.push({name: "Joined Communitys", params: {id: this.userID}})
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 
-
+.group-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  top: 25px;
+  width: 5.5rem;
+  min-height: 4rem;
+  background: #4547e4;
+  color: #fff;
+  a {
+    color: #fff;
+  }
+}
 </style>

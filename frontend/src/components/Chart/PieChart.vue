@@ -1,7 +1,6 @@
 <template>
   <div class="pie-box">
     <canvas id="pie-chart"></canvas>
-    <button @click="destoryChart">click</button>
   </div>
 
 
