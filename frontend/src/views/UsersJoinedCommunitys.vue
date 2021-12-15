@@ -10,9 +10,16 @@
 </template>
 
 <script>
+
+import {fetchUsersCommunitys} from '../firebase-config'
 export default {
   name: "Joined-Communitys",
   props: ["joinedCommunitys"],
+  data() {
+    return {
+      fetchedList: []
+    }
+  },
   methods: {
       checkOutCommunity(id){
       this.$router.push({name: "Community", params: {id: id}})
@@ -21,8 +28,12 @@ export default {
   },
   computed: {
     communitys: function () {
-      return this.joinedCommunitys ? this.joinedCommunitys : "failed to fetch groups"
+      return this.fetchedList ? this.fetchedList : "failed to fetch groups"
     }
+  },
+  async mounted() {
+    this.fetchedList = await fetchUsersCommunitys(this.$route.params.id)
+
   }
 }
 </script>

@@ -51,7 +51,6 @@ export default {
     //all groups that has isPrivate = false 
     //all polls that should be displayed on homepage feed
     this.feed = await initializeData()
-
   },
   async updated() {
     console.log("app.vue updating now........")

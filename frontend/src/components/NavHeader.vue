@@ -9,10 +9,11 @@
     
     </section>
     <section v-else class="menu-buttons">
+
     <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="toggleGroupOptions" class="signup"><router-link to="/new-group">Groups</router-link></button>
+    <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
     <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
-    <section v-if="!displayGroupOptions" class="group-options">
+    <section v-if="displayGroupOptions" class="group-options">
       <router-link to="/new-group">Create Group</router-link>
       <p @click="checkOutGroups">Joined Groups</p>
     </section>

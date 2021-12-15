@@ -240,8 +240,8 @@ export const pushVote = async (userVote, community, index, title) => {
   })
 }
 
-export const fetchUsersCommunitys = async () => {
-  let docsRef = query(groupsCollection, where("members", "array-contains-any", ["quV7uwaMMvgvsqxfrdB3OJyCX7R2"]))
+export const fetchUsersCommunitys = async (id) => {
+  let docsRef = query(groupsCollection, where("members", "array-contains-any", [id]))
   let snapShot = await getDocs(docsRef)  
   return new Promise((resolve, reject) => {
     let communitys = []
