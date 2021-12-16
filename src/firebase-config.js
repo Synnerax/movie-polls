@@ -108,15 +108,6 @@ export const signInWithGoogle = () => {
   })
 }
 
-export const logOut = () => {
-  signOut(auth).then(() => {
-    // Sign-out successful.
-    console.log("Signed out")
-  }).catch((error) => {
-    // An error happened.
-    console.log("Not signed in")
-  });
-}
 
 export const initializeData = () => {
   const q = query(groupsCollection, where("isPrivate", "==", false));
