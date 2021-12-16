@@ -12,7 +12,7 @@
 </template>
 <script>
 import NavHeader from "./components/NavHeader.vue"
-import { auth, initializeData , fetchUsersCommunitys ,loadGroups, publicGroups, db, groupsFeed, pollsFeed } from "./firebase-config"
+import { auth, initializeData } from "./firebase-config"
 import { onAuthStateChanged } from "firebase/auth"
 
 export default {
@@ -36,7 +36,6 @@ export default {
       this.feed = await initializeData()
     },
     updateSearch(input) {
-      //console.log("search input App.vue", input)
       this.search = input
 
       this.$router.push({name: "Search Result"})

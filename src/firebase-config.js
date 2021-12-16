@@ -1,19 +1,17 @@
-//import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDoc ,getDocs, doc, query, where , updateDoc, onSnapshot, arrayUnion, FieldPath, setDoc } from "firebase/firestore";
-//import { getStorage } from "firebase/storage";
-import { ref, onUnmounted } from "vue";
 
 
 import { 
   getAuth,
-  onAuthStateChanged, 
   GoogleAuthProvider, 
   signInWithPopup, 
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from 'firebase/auth'
+
+//Not sure if this was added when deplying to heroku
 import { stringify } from "@firebase/util";
 import { compile } from "@vue/compiler-dom";
 
@@ -30,19 +28,14 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
-//const firebaseApp = firebase.initializeApp(firebaseConfig)
-//const db = firebaseApp.firestore()
 
-
-
-//const auth = getAuth();
 export const signUpWithEmailAndPassword = ( email, password ) => {
 
   createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
-    // Signed in 
+    // Signed in
+    //Not using the data here as we retrive it from onAuthStateChanged in App.vue
     const user = userCredential.user;
-    // ...
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -50,7 +43,6 @@ export const signUpWithEmailAndPassword = ( email, password ) => {
     console.log("errorCode: ", errorCode)
     console.log("errorMessage: ", errorMessage)
 
-    // ..
   });
 }
 
@@ -58,20 +50,23 @@ export const logInWithEmailAndPassword = ( email, password ) => {
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
-    console.log("you signed in")
+    console.log("You signed in")
     const user = userCredential.user;
-    // ...
+
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+    console.log("errorCode: ", errorCode)
+    console.log("errorMessage: ", errorMessage)
+
   });
 }
 export const groupsCollection = collection(db, "groups");
 export const publicGroups = query(groupsCollection, where("isPrivate", "==", false));
 
 
-//const projectStorage = getStorage();
+
 export const createGroup = async (group) => {
   let docRef = await addDoc(groupsCollection,  group );
   return new Promise((resolve, reject) => {
@@ -91,14 +86,6 @@ export const deleteGroup = (id) => {
   return groupsCollection.doc(id).delete();
 };
 
-export const useLoadGroups = () => {
-  const groups = ref([]);
-  groupsCollection.onSnapshot((snapshot) => {
-    groups.value = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  });
-  onUnmounted(close);
-  return;
-};
 
 
 const provider = new GoogleAuthProvider()
@@ -107,6 +94,7 @@ export const signInWithGoogle = () => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     // The signed-in user info.
+    //Not using the data here as we retrive it from onAuthStateChanged in App.vue
     const user = result.user;
   })
   .catch((error) => {
@@ -123,19 +111,12 @@ export const signInWithGoogle = () => {
 export const logOut = () => {
   signOut(auth).then(() => {
     // Sign-out successful.
-    console.log("signed out")
+    console.log("Signed out")
   }).catch((error) => {
     // An error happened.
-    console.log("not signed in")
+    console.log("Not signed in")
   });
 }
-
-export const loadGroups = (async () => {
-   const snapshot = await getDocs(groupsCollection)
-   let groups = snapshot.docs.map(doc => doc.data())
-   
-   return groups
-})
 
 export const initializeData = () => {
   const q = query(groupsCollection, where("isPrivate", "==", false));
@@ -166,7 +147,6 @@ export const joinCommunity = async (userID, community) => {
 export const publishPoll = async (poll, community) => {
 
   const docRef = doc(db, "groups", community)
-
   await updateDoc(docRef, {
     polls: arrayUnion(JSON.parse(JSON.stringify(poll)))
   });
@@ -214,15 +194,9 @@ export const fetchUsersCommunitys = async (id) => {
   })
 }
 
-//Search for poll name in groups
 
-//Search for groups name
-
-//Search for all genres
 export const searchForKeyWord = async (searchWord, selectedSearch) => {
-  //let docsRef = query(groupsCollection, where(selectedSearch, params, searchWord))
   let searchQuery
-  //let params = "array-contains-any" ? 
   
   if(selectedSearch === "name") {
     searchQuery = query(groupsCollection, where("name", "==", searchWord))
@@ -230,8 +204,6 @@ export const searchForKeyWord = async (searchWord, selectedSearch) => {
   else {
     searchQuery = query(groupsCollection, where(selectedSearch, "array-contains-any", [searchWord]))
   }
-  console.log("Searching in DB for :", searchWord, selectedSearch, "with params: ")
-  console.log("docsnap::: ", docSnap)
   
   const docSnap = await getDocs(searchQuery)
   return new Promise((resolve, reject) => {
