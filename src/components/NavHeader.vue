@@ -1,37 +1,32 @@
 <template>
     <div id="nav">
-    <router-link to="/"><h1>Movie Polls</h1></router-link>
-    <select v-model="selectedSearch" name="" id="">
-      <option value="polls">Poll</option>
-      <option value="name">Group</option>
-      <option value="genre">Genre</option>
-    </select>
-    <input 
-      @keyup.enter="searchInDB"
-      type="text" 
-      placeholder="Search Archive"
-      v-model="searchWord"  
-    >
+      <router-link to="/"><h1>Movie Polls</h1></router-link>
+      <select v-model="selectedSearch" name="" id="">
+        <option value="polls">Poll</option>
+        <option value="name">Group</option>
+        <option value="genre">Genre</option>
+      </select>
+      <input 
+        @keyup.enter="searchInDB"
+        type="text" 
+        placeholder="Search Archive"
+        v-model="searchWord"  
+      >
     
-    <section v-if="!loggedIn" class="menu-buttons">
-    <button class="login"><router-link to="/login"> Login </router-link></button>
-    <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
-    
-    </section>
-    <section v-else class="menu-buttons">
-
-    <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
-    <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
-    <section v-if="displayGroupOptions" class="group-options">
-      <router-link to="/new-group">Create Group</router-link>
-      <p @click="checkOutGroups">Joined Groups</p>
-    </section>
-    </section>
-    
-    <!--<router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-    -->
+      <section v-if="!loggedIn" class="menu-buttons">
+        <button class="login"><router-link to="/login"> Login </router-link></button>
+        <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
+      
+      </section>
+      <section v-else class="menu-buttons">
+        <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
+        <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
+        <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
+      <section v-if="displayGroupOptions" class="group-options">
+        <router-link to="/new-group">Create Group</router-link>
+        <p @click="checkOutGroups">Joined Groups</p>
+      </section>
+      </section>
   </div>
   
 </template>
@@ -49,17 +44,6 @@ export default {
       selectedSearch: "",
       searchList: [],
     }
-  },
-  watch: {
-    async $route(to, from) {
-    // react to route changes...
-    console.log("Checking if logged in..")
-    
-    if (to.name == "Home") {
-     
-      console.log("-----try rerender", )
-    } 
-  }
   },
   methods: {
     logOut() {
@@ -79,17 +63,14 @@ export default {
       this.$router.push({name: "Joined Communitys", params: {id: this.userID}})
     },
     async searchInDB() {
-      //console.log("Searching for ", this.searchWord, "in ", this.selectedSearch)
       if(this.selectedSearch === "polls") {
         this.polls.forEach((poll) => {
           if(poll.title === this.searchWord) {
             this.searchList = poll
-            console.log("in the loop")
             return
           }
         })
       } else {
-        //let params = (this.selectedSearch === "groups") ? "==" : "array-contains-any"
         this.searchList = await searchForKeyWord(this.searchWord, this.selectedSearch)
       }
       this.$emit('onSearch', this.searchList);
