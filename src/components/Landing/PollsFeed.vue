@@ -11,9 +11,7 @@ export default {
   props: ["polls"],
   methods: {
       checkOutPoll(title){
-        console.log("Imma fiering my laza ")
       this.$router.push({name: "Poll Voting", params: {title: title}})
-      console.log(this.$route.params.title)
     }
   },
   components: {

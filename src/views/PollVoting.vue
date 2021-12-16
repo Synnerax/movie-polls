@@ -31,7 +31,6 @@
 
 import MovieChart from "../components/Chart/PieChart.vue"
 import { pushVote } from "../firebase-config"
-//chart: https://www.digitalocean.com/community/tutorials/vuejs-vue-chart-js
 export default {
   name: "Voting",
   data() {
@@ -74,10 +73,8 @@ export default {
   },
   methods: {
     async voteOnTitle(index) {
-      let data = await pushVote(this.userID, this.poll.group, index, this.poll.title)
-      console.log("and the awsome data: ", data)
+      await pushVote(this.userID, this.poll.group, index, this.poll.title)
       this.voteIndex = index
-      console.log("the user: ", this.userID, "The group:", this.poll, "index: ", index)
       this.$emit("fetchData")
       
     }

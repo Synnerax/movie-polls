@@ -48,7 +48,8 @@ export default {
   methods: {
     onSubmit() {
       if(this.group.name === "" || this.group.genre.length <= 0) {
-        console.log("try again madda fakka")
+        //had issues on heroku when trying to do the if logic the other way around
+        return
       } else {
         createGroup(this.group)
         .then((id) => {
@@ -82,7 +83,6 @@ export default {
     },
     async updateRoute(id) {
       this.$emit("fetchData")
-      console.log("this should be the id: ", id)
       this.$router.push({name: "Home"})
     }
   }

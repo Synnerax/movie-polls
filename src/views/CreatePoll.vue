@@ -83,9 +83,8 @@ export default {
     },
     addToPoll() {
       if(!this.movie.title || !this.movie.release || !this.movie.director) {
-        console.log("missing input")
+        //Should display error on inputs
       } else {
-        console.log("all inputs filled")
         this.addedTitles.push(this.movie)
         this.movie = {
           title: "",
@@ -93,8 +92,6 @@ export default {
           director: "",
           votes: []
         }
-        console.log("this is addedTitles: ", this.addedTitles)
-
       }
     },
     async onSubmitPoll() {

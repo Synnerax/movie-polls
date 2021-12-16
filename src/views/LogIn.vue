@@ -21,10 +21,6 @@ import { logInWithEmailAndPassword, signInWithGoogle } from "../firebase-config"
 
 export default {
   name: "SignUp",
-  setup() {
-    console.log("setup() in SignUp form")
-    return {}
-  },
   props: [
     "isLoggedIn"
   ],
@@ -44,24 +40,20 @@ export default {
             this.emptyFields = true;
          } else {
             logInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
-            //this.$router.push({name: "Home"})
 
          }
       },
-      async googleProviderSignIn() {
-        let data = await signInWithGoogle()
-        console.log("trying to sign in with google..", data)
-        //this.$router.push({name: "Home"})
+      googleProviderSignIn() {
+        signInWithGoogle()
       }
    },
    watch: {
     isLoggedIn: function(to, from) {
     // react to route changes...
-    console.log("Checking if logged in..")
+    // redirects to home page if singed in
     if(to) {
       this.$router.push("/")
     }
-    console.log("this is TO: ", to)
   }
   },
 }
