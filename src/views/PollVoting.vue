@@ -15,7 +15,7 @@
           <p>{{movie.director}}</p>
           <span>-</span>
           <p>{{movie.release}}</p>
-          <button @click="voteOnTitle(index)">Vote</button>
+          <button @click="voteOnTitle(index)" :disabled="!isExpired">Vote</button>
         </section>
       </article>
       <article class="right-section-poll-view">
@@ -63,7 +63,11 @@ export default {
     countedVotes() {
       let check = this.poll ? this.poll.voted.length : "Error getting votes"
       return check
-    }
+    },
+    isExpired: function() {
+    let date = this.poll.voteExpire ? this.poll.voteExpire : "Missing Expire Date" 
+    return new Date(date) >= new Date()
+  }
   },
   components: {
     MovieChart

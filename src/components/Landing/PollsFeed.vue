@@ -18,6 +18,10 @@ export default {
   },
   components: {
     Poll
+  },
+  computed: {
+
+
   }
 }
 </script>
