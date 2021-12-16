@@ -17,7 +17,7 @@
           <input v-model="movie.release" type="text" placeholder="Release Date">
           <input v-model="movie.director" type="text" placeholder="Director">
           <section class="private-section">
-              <input v-model="expireDate" type="date" name="" id="">
+              <input v-model="expireDate" type="date" min="2021-01-01" max="2023-12-31" name="" id="">
           </section>
           <button @click.prevent="addToPoll">Add To Poll</button>
         </section>
@@ -52,7 +52,7 @@ export default {
   name: "new-poll",
   data() {
     return {
-      expireDate: "yyyy/mm/dd",
+      expireDate: null,
       selectedFile: null,
       imageSource: "",
       preview: false,
@@ -94,14 +94,16 @@ export default {
           votes: []
         }
         console.log("this is addedTitles: ", this.addedTitles)
+
       }
     },
     async onSubmitPoll() {
       // Checks if user has set a group
-      if(this.groupName){
+      if(this.groupName && this.expireDate.length === 10){
         //takes the groups ID
         const groupID = await this.updateSelectedGroup()
          const poll = {
+          voteExpire: this.expireDate,
           owner: this.userID,
           group: groupID, 
           title: this.pollName, 
