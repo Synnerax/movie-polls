@@ -1,30 +1,33 @@
 <template>
     <div id="nav">
-      <router-link to="/"><h1>Movie Polls</h1></router-link>
-      <select v-model="selectedSearch" name="" id="">
-        <option value="polls">Poll</option>
-        <option value="name">Group</option>
-        <option value="genre">Genre</option>
-      </select>
-      <input 
-        @keyup.enter="searchInDB"
-        type="text" 
-        placeholder="Search Archive"
-        v-model="searchWord"  
-      >
+      <section class="nav-search-wrapper">
+        <router-link to="/"><h1>Movie Polls</h1></router-link>
+        <select  v-model="selectedSearch" name="" id="">
+          <option value="" disabled selected>Select</option>
+          <option value="polls">Poll</option>
+          <option value="name">Group</option>
+          <option value="genre">Genre</option>
+        </select>
+        <input 
+          @keyup.enter="searchInDB"
+          type="text" 
+          placeholder="Search Archive"
+          v-model="searchWord"  
+        >
+      </section>
     
-      <section v-if="!loggedIn" class="menu-buttons">
+      <section v-if="!loggedIn" class="login-signup-options">
         <button class="login"><router-link to="/login"> Login </router-link></button>
         <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
       
       </section>
       <section v-else class="menu-buttons">
-        <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-        <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
-        <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
-      <section v-if="displayGroupOptions" class="group-options">
-        <router-link to="/new-group">Create Group</router-link>
-        <p @click="checkOutGroups">Joined Groups</p>
+        <button v-on:click="toggleGroupOptions" class="show-options-menu">Groups</button>
+        <button v-on:click="testFunc" @click="logOut" class="logout">Log Out</button>
+      <section v-show="displayGroupOptions" class="group-options">
+        <router-link to="/new-poll" class="link-border"> Create Poll </router-link>
+        <router-link to="/new-group" class="link-border">Create Group</router-link>
+        <p @click="checkOutGroups" class="link-border">You'r Collection</p>
       </section>
       </section>
   </div>
@@ -43,6 +46,13 @@ export default {
       searchWord: "",
       selectedSearch: "",
       searchList: [],
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if(this.displayGroupOptions) {
+        this.toggleGroupOptions()
+      }
     }
   },
   methods: {
@@ -83,16 +93,21 @@ export default {
 
 .group-options {
   display: flex;
+  justify-content: space-evenly;
   flex-direction: column;
   gap: 5px;
   position: absolute;
-  top: 25px;
-  width: 5.5rem;
-  min-height: 4rem;
-  background: #4547e4;
-  color: #fff;
+  top: 45px;
+  width: 100%;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
+  transition: all 2s cubic-bezier(0.25, 0.8, 0.25, 1);
   a {
-    color: #fff;
+    color: rgb(0, 0, 0);
   }
+
 }
+
+
 </style>

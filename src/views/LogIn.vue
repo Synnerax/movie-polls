@@ -24,6 +24,11 @@ export default {
   props: [
     "isLoggedIn"
   ],
+  mounted(){
+    if(this.isLoggedIn) {
+      this.$router.push("/")
+    }
+  },
   data() {
     return {
       registerActive: false,
@@ -51,11 +56,11 @@ export default {
     isLoggedIn: function(to, from) {
     // react to route changes...
     // redirects to home page if singed in
+    console.log("singed in here")
     if(to) {
       this.$router.push("/")
     }
-  }
-  },
+  }}
 }
 </script>
 

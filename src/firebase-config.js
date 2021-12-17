@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDoc ,getDocs, doc, query, where , updateDoc, onSnapshot, arrayUnion, FieldPath, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDoc ,getDocs, doc, query, where , updateDoc, onSnapshot, arrayUnion, arrayRemove } from "firebase/firestore";
 
 
 import { 
@@ -130,11 +130,32 @@ export const initializeData = () => {
 
 export const joinCommunity = async (userID, community) => {
 
-  const docRef = doc(db, "groups", community)
-  await updateDoc(docRef, {
-    members: arrayUnion(userID)
-  });
+  return new Promise(async (resolve, reject) => {
+    const docRef = doc(db, "groups", community)
+    await updateDoc(docRef, {
+      members: arrayUnion(userID)
+    });
+    const updatedDoc = await getDoc(docRef)
+    resolve(updatedDoc.data())
+  })
 }
+
+export const leaveCommunity = async (userID, community) => {
+
+  // Atomically remove a region from the "regions" array field.
+  return new Promise( async (resolve, reject) => {
+    const docRef = doc(db, "groups", community)
+    await updateDoc(docRef, {
+      members: arrayRemove(userID)
+    });
+
+    const updatedDoc = await getDoc(docRef)
+    resolve(updatedDoc.data())
+  }) 
+    
+}
+
+
 export const publishPoll = async (poll, community) => {
 
   const docRef = doc(db, "groups", community)

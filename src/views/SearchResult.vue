@@ -7,23 +7,31 @@
         </section>
       </section>
       <section v-else class="object-result">
+        <Poll @click="checkOutPoll(result.title)" :poll="result"  class="poll-wrapper"/>
+        <!--
         <article @click="checkOutPoll(result.title)" class="poll-feed-item" >
-        <!--This should return group name and not group ID-->
+        
         <p>c/{{result.groupName}}</p>
         <p>{{result.title}} - Votes: {{votes}}</p>
           <section v-for="(movie, index) in result.movieList" :key="index">
             <p>{{movie.title}} - {{movie.release}} - {{movie.director}}</p>
           </section>
         </article>
+        -->
       </section>
     </article>
   </section>
 </template>
 
 <script>
+import Poll from "../components/Landing/Poll.vue"
+
 export default {
   name: "SearchResult", 
   props: ["result"],
+  components: {
+    Poll
+  },
   computed: {
     isPoll: function () {
       return Array.isArray(this.result)

@@ -23,6 +23,11 @@ import { signUpWithEmailAndPassword, signInWithGoogle } from "../firebase-config
 export default {
   name: "SignUp",
   props: ["isLoggedIn"],
+  mounted(){
+    if(this.isLoggedIn) {
+      this.$router.push("/")
+    }
+  },
   data() {
     return {
       registerActive: false,
@@ -46,7 +51,6 @@ export default {
          if (this.emailReg === "" || this.passwordReg === "" ) {
             this.emptyFields = true;
          } else {
-            //alert("You are now registered");
             signUpWithEmailAndPassword(this.emailReg, this.passwordReg)
          }
       },
@@ -56,7 +60,6 @@ export default {
    },
    watch: {
     isLoggedIn: function(to, from) {
-    // react to route changes...
     if(to) {
       this.$router.push("/")
     }

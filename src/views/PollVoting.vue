@@ -6,7 +6,7 @@
         <h1>
         {{this.poll.title}}
         </h1>
-        <p>Votes: </p>
+        <p>Votes: {{this.votes}}</p>
         </section>
 
         <section class="poll-option" v-for="(movie, index) in this.poll.movieList" :key="index">
@@ -30,16 +30,18 @@
 <script>
 
 import MovieChart from "../components/Chart/PieChart.vue"
-import { pushVote } from "../firebase-config"
+import { pushVote, auth } from "../firebase-config"
+import { onAuthStateChanged,  } from "firebase/auth"
 export default {
   name: "Voting",
   data() {
     return {
       poll: {
+        movieList: [],
         voted: [ ["userid", "moreVote"], ["anotheruser"], ["userthird"], ["thoruthdas"]]
       },
       chartData: [],
-      voteIndex: null
+      voteIndex: null,
     }
   },
   props: ["pollsFeed", "userID"],
@@ -59,9 +61,17 @@ export default {
     })
   },
   computed: {
-    countedVotes() {
-      let check = this.poll ? this.poll.voted.length : "Error getting votes"
-      return check
+    votes: function() {
+      
+      let oldList = 0
+      this.poll.movieList.map((list) => {
+       if(list.votes) {
+         oldList = oldList + list.votes.length
+       } else {
+         oldList = "Missing"
+       }
+     })
+       return oldList
     },
     isExpired: function() {
     let date = this.poll.voteExpire ? this.poll.voteExpire : "Missing Expire Date" 
@@ -73,10 +83,17 @@ export default {
   },
   methods: {
     async voteOnTitle(index) {
-      await pushVote(this.userID, this.poll.group, index, this.poll.title)
-      this.voteIndex = index
-      this.$emit("fetchData")
-      
+      onAuthStateChanged(auth, async (user) => {
+      if(user) {
+        await pushVote(this.userID, this.poll.group, index, this.poll.title)
+        this.voteIndex = index
+        this.$emit("fetchData")
+      } else {
+        //should show error in frontend
+        this.$router.push({name: "Login"})
+        console.log("not logged in")
+      }
+    })
     }
   }
 }

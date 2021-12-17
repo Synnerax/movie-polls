@@ -47,7 +47,7 @@
 <script>
 //missing poll end date
 //missing vote end date
-import { publishPoll } from "../firebase-config"
+import { publishPoll, fetchUsersCommunitys } from "../firebase-config"
 export default {
   name: "new-poll",
   data() {
@@ -126,12 +126,16 @@ export default {
     },
 
   },
-  created() {
-    
-    this.communitys.forEach((group) => {
-      this.options.push(group.name)
-    })
-  }
+   async created() {
+     
+     let options = await fetchUsersCommunitys(this.userID)
+     options.forEach((option) => {
+       this.options.push(option.name)
+     })
+
+  },
+  
+  
 
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
   <section class="polls-feed">
+    <section class="filter-feed-wrapper">
+
+    </section>
     <Poll @click="checkOutPoll(poll.title)" v-for="(poll, index) in polls" :key="index" :poll="poll"  class="poll-wrapper" /> 
     
   </section>
@@ -9,6 +12,11 @@
 import Poll from "./Poll.vue"
 export default {
   props: ["polls"],
+  data() {
+    return {
+      pollsOrder: this.polls
+    }
+  },
   methods: {
       checkOutPoll(title){
       this.$router.push({name: "Poll Voting", params: {title: title}})
@@ -18,8 +26,15 @@ export default {
     Poll
   },
   computed: {
-
-
+    /*sortedByVotes: function () {
+        
+      return this.pollsOrder.sort((a, b) => new Date(a.date) - new Date(b.date))
+      //return [...this.polls.filter(poll => new Date(poll.voteExpire) < new Date()), ...this.polls.filter(poll => new Date(poll.voteExpire) > new Date())]
+    }
+  */
+  },
+  mounted(){
+    this.pollsOrder.sort((a, b) => new Date(a.date) - new Date(b.date))
   }
 }
 </script>
@@ -29,8 +44,8 @@ export default {
     flex-wrap: wrap;
     display: flex;
     flex-direction: column;
-    min-width: 25rem;
-    width: 62vw;
+    min-width: 16rem;
+    width: 60vw;
     min-height: 30rem;
     //background: #fff;
     border-radius: 10px;
