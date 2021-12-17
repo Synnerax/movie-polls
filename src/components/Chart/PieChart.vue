@@ -2,32 +2,22 @@
   <div class="pie-box">
     <canvas id="pie-chart"></canvas>
   </div>
-
-
 </template>
 
 <script>
 import Chart from 'chart.js'
 import { shallowRef } from 'vue';
 
-import pieChartData from "./pieChart-data"
-// next step: https://www.chartjs.org/docs/latest/developers/updates.html
 export default {
   name: 'MovieChart',
   data() {
     this.chart = {
         type: "pie",
         data: {
-          labels: [
-          //'Red',
-          //'Blue',
-          //'Yellow'
-        ],
+          labels: [],
         datasets: [{
           label: 'My First Dataset',
-          data: [
-            //2, 1, 5
-          ],
+          data: [],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
@@ -82,30 +72,23 @@ export default {
   },
   methods: {
     addData() {
-      
-    if(this.testChart.data.datasets.length > 0) {
-      this.testChart.data.datasets[0].data.push(+1)
-      this.testChart.data.labels.push(this.labelData);
-    this.testChart.update();
+      if(this.testChart.data.datasets.length > 0) {
+        this.testChart.data.datasets[0].data.push(+1)
+        this.testChart.data.labels.push(this.labelData);
+      this.testChart.update();
     }  
-    console.log("[0]", this.testChart.data.datasets[0])
-    
-    //this.chart.data.labels.push("new value")
-    //console.log(this.chart.data.datasets[0])
 },
-
   removeData() {
     this.chart.data.labels.pop();
     this.chart.data.datasets.forEach((dataset) => {
-        dataset.data.pop();
+    dataset.data.pop();
     });
     this.chart.update();
 },
 destoryChart() {
   this.testChart.destroy()
 }
-  },
-
+},
 }
 </script>
 

@@ -23,9 +23,10 @@ import { signUpWithEmailAndPassword, signInWithGoogle } from "../firebase-config
 export default {
   name: "SignUp",
   props: ["isLoggedIn"],
-  setup() {
-    console.log("setup() in SignUp form")
-    return {}
+  mounted(){
+    if(this.isLoggedIn) {
+      this.$router.push("/")
+    }
   },
   data() {
     return {
@@ -49,25 +50,19 @@ export default {
       doRegister() {
          if (this.emailReg === "" || this.passwordReg === "" ) {
             this.emptyFields = true;
-            console.log(this.passwordReg)
          } else {
-            //alert("You are now registered");
             signUpWithEmailAndPassword(this.emailReg, this.passwordReg)
          }
       },
       googleProviderSignUp() {
-        console.log("trying to sign in with google..")
         signInWithGoogle()
       }
    },
    watch: {
     isLoggedIn: function(to, from) {
-    // react to route changes...
-    console.log("Checking if logged in..")
     if(to) {
       this.$router.push("/")
     }
-    console.log("this is TO: ", to)
   }
   },
 }
@@ -76,7 +71,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  height: 74vw;
+  margin-top: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;

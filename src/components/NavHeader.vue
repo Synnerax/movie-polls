@@ -1,37 +1,35 @@
 <template>
     <div id="nav">
-    <router-link to="/"><h1>Movie Polls</h1></router-link>
-    <select v-model="selectedSearch" name="" id="">
-      <option value="polls">Poll</option>
-      <option value="name">Group</option>
-      <option value="genre">Genre</option>
-    </select>
-    <input 
-      @keyup.enter="searchInDB"
-      type="text" 
-      placeholder="Search Archive"
-      v-model="searchWord"  
-    >
+      <section class="nav-search-wrapper">
+        <router-link to="/"><h1>Movie Polls</h1></router-link>
+        <select  v-model="selectedSearch" name="" id="">
+          <option value="" disabled selected>Select</option>
+          <option value="polls">Poll</option>
+          <option value="name">Group</option>
+          <option value="genre">Genre</option>
+        </select>
+        <input 
+          @keyup.enter="searchInDB"
+          type="text" 
+          placeholder="Search Archive"
+          v-model="searchWord"  
+        >
+      </section>
     
-    <section v-if="!loggedIn" class="menu-buttons">
-    <button class="login"><router-link to="/login"> Login </router-link></button>
-    <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
-    
-    </section>
-    <section v-else class="menu-buttons">
-
-    <button class="login"><router-link to="/new-poll"> New Poll </router-link></button>
-    <button v-on:click="toggleGroupOptions" class="signup">Groups</button>
-    <button v-on:click="testFunc" @click="logOut" class="signup">Log Out</button>
-    <section v-if="displayGroupOptions" class="group-options">
-      <router-link to="/new-group">Create Group</router-link>
-      <p @click="checkOutGroups">Joined Groups</p>
-    </section>
-    </section>
-    
-    <!--<router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-    -->
+      <section v-if="!loggedIn" class="login-signup-options">
+        <button class="login"><router-link to="/login"> Login </router-link></button>
+        <button v-on:click="testFunc" class="signup"><router-link to="/sign-up">Sign up</router-link></button>
+      
+      </section>
+      <section v-else class="menu-buttons">
+        <button v-on:click="toggleGroupOptions" class="show-options-menu">Create or View</button>
+        <button v-on:click="testFunc" @click="logOut" class="logout">Log Out</button>
+      <section v-show="displayGroupOptions" class="group-options">
+        <router-link to="/new-poll" class="link-border"> Create Poll </router-link>
+        <router-link to="/new-group" class="link-border">Create Group</router-link>
+        <p @click="checkOutGroups" class="link-border">You'r Collection</p>
+      </section>
+      </section>
   </div>
   
 </template>
@@ -51,15 +49,11 @@ export default {
     }
   },
   watch: {
-    async $route(to, from) {
-    // react to route changes...
-    console.log("Checking if logged in..")
-    
-    if (to.name == "Home") {
-     
-      console.log("-----try rerender", )
-    } 
-  }
+    $route(to, from) {
+      if(this.displayGroupOptions) {
+        this.toggleGroupOptions()
+      }
+    }
   },
   methods: {
     logOut() {
@@ -79,17 +73,14 @@ export default {
       this.$router.push({name: "Joined Communitys", params: {id: this.userID}})
     },
     async searchInDB() {
-      //console.log("Searching for ", this.searchWord, "in ", this.selectedSearch)
       if(this.selectedSearch === "polls") {
         this.polls.forEach((poll) => {
           if(poll.title === this.searchWord) {
             this.searchList = poll
-            console.log("in the loop")
             return
           }
         })
       } else {
-        //let params = (this.selectedSearch === "groups") ? "==" : "array-contains-any"
         this.searchList = await searchForKeyWord(this.searchWord, this.selectedSearch)
       }
       this.$emit('onSearch', this.searchList);
@@ -98,20 +89,25 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .group-options {
   display: flex;
+  justify-content: space-evenly;
   flex-direction: column;
   gap: 5px;
   position: absolute;
-  top: 25px;
-  width: 5.5rem;
-  min-height: 4rem;
-  background: #4547e4;
-  color: #fff;
+  top: 45px;
+  width: 100%;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
+  transition: all 2s cubic-bezier(0.25, 0.8, 0.25, 1);
   a {
-    color: #fff;
+    color: rgb(0, 0, 0);
   }
+
 }
+
+
 </style>
