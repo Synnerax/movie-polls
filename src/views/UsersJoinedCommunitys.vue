@@ -4,7 +4,7 @@
       <section class="delete-confirm-wrapper">
         <span class="cancel-delete" @click="toggleLigthbox">&#10006;</span>
         <h1>Are you sure you want to delete your account?</h1>
-        <input v-model="password" v-if="!isGoogle" type="text" name="" id="">
+        <input v-model="password" v-if="!isGoogle" type="password" name="" id="">
         <section class="delete-buttons-section">
           <button class="confirm-button" @click="deleteByID">Delete User</button>
           <button class="cancel-button" @click="toggleLigthbox">Cancel</button>

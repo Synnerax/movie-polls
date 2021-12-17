@@ -2,38 +2,40 @@
   <section class="create-poll">
     <article class="new-poll card-border">
       <div class="poll-header">
-        <input class="first" v-model="pollName" type="text" name="poll-title" id="poll-title" placeholder="Title">
-       <!--
-        <select v-model="group" :disabled="isPrivate" id="group-selector">
-            <option value="" disabled selected>Select Group</option>
-            <option v-for="community in communitys" :key="community.id" :value="community.id">{{community.name}}</option>
-        </select> -->
-        <v-select v-if="this.communitys" @change="() => updateSelectedGroup" class="group-selector" v-model="groupName" :options="options"></v-select>
+        <input 
+          class="first" 
+          v-model="pollName" 
+          type="text" 
+          name="poll-title" 
+          id="poll-title" 
+          placeholder="Title"
+          :class="{ missing: validation.pollTitle }"
+          >
+          
+        <v-select 
+          v-if="this.communitys" 
+          @change="() => updateSelectedGroup" 
+          class="group-selector" 
+          v-model="groupName" 
+          :options="options"
+          >
+          
+          </v-select>
         <button class="push-poll" @click.prevent="onSubmitPoll">Push</button>
       </div>
       <div class="poll-body">
         <section class="add-title">
-          <input v-model="movie.title" type="text" placeholder="Movie Title">
-          <input v-model="movie.release" type="text" placeholder="Release Date">
-          <input v-model="movie.director" type="text" placeholder="Director">
+          <input v-model="movie.title" type="text" placeholder="Movie Title" :class="{ missing: validation.title }">
+          <input v-model="movie.release" type="text" placeholder="Release Date" :class="{ missing: validation.release }">
+          <input v-model="movie.director" type="text" placeholder="Director" :class="{ missing: validation.director }">
           <section class="private-section">
-              <input v-model="expireDate" type="date" min="2021-01-01" max="2023-12-31" name="" id="">
+              <input v-model="expireDate" type="date" min="2021-01-01" max="2023-12-31" name="" id="" :class="{ missing: validation.expireDate }">
           </section>
           <button @click.prevent="addToPoll">Add To Poll</button>
         </section>
         <section class="added-titles">
-          <article v-for="movie in addedTitles" :key="movie.title">
-            <!-- 
-            <section>
-              <input 
-              @change="onFileSelected" 
-              type="file" 
-              name="private" 
-              accept="image/*"
-              id="private-checkbox">
-            </section>
-            -->
-
+          <article class="poll-item" v-for="(movie, index) in addedTitles" :key="movie.title">
+            <span class="remove-poll-item" @click="removeTitle(index)">&#10006;</span>
             <p>{{movie.title}}</p>
             <p>{{movie.release}}</p>
             <p>{{movie.director}}</p>
@@ -45,8 +47,7 @@
 </template>
 
 <script>
-//missing poll end date
-//missing vote end date
+
 import { publishPoll, fetchUsersCommunitys } from "../firebase-config"
 export default {
   name: "new-poll",
@@ -68,7 +69,15 @@ export default {
       },
       addedTitles: [],
       isPrivate: false,
-      options: []
+      options: [],
+      validation: {
+        title: false,
+        release: false,
+        director: false,
+        expireDate: false,
+        pollTitle: false,
+        group: false
+      }
     }
   },
   props: {
@@ -76,14 +85,21 @@ export default {
     communitys: Array
   },
   methods: {
-    onFileSelected(event) {
-      this.imageSource = URL.createObjectURL(event.target.files[0]);
-      this.preview = true;
-      this.selectedFile = event.target.files[0];
-    },
     addToPoll() {
       if(!this.movie.title || !this.movie.release || !this.movie.director) {
         //Should display error on inputs
+        if(this.movie.title === "") {
+          this.validation.title = true
+        }
+        if(this.movie.release === "") {
+          this.validation.release = true
+
+        }
+        if(this.movie.director === "") {
+          this.validation.director = true
+
+        }
+
       } else {
         this.addedTitles.push(this.movie)
         this.movie = {
@@ -92,11 +108,20 @@ export default {
           director: "",
           votes: []
         }
+        this.validation = {
+        title: false,
+        release: false,
+        director: false,
+        expireDate: false
       }
+      }
+    },
+    removeTitle(index) {
+      this.addedTitles.splice(index, 1)
     },
     async onSubmitPoll() {
       // Checks if user has set a group
-      if(this.groupName && this.expireDate.length === 10){
+      if(this.groupName && this.expireDate.length === 10 && this.pollName === ""){
         //takes the groups ID
         const groupID = await this.updateSelectedGroup()
          const poll = {
@@ -111,7 +136,16 @@ export default {
       publishPoll(poll, groupID)
       this.$emit("fetchData")
       this.$router.push({name: "Home"})
-
+      } else {
+        if(this.groupName === "") {
+          this.validation.pollTitle = true
+        }
+        if(this.expireDate === null || this.expireDate.length === !10) {
+          this.validation.expireDate = true
+        }
+        if(this.pollName === "") {
+          this.validation.pollTitle = true
+        }
       }
 
     },
@@ -232,10 +266,20 @@ export default {
             margin-left: 2rem;
             margin-bottom: 1rem;
             border-bottom: 2px solid #e5e5e5;
+            position: relative;
 
+            .remove-poll-item {
+              cursor: pointer;
+              position: absolute;
+              top: 5px;
+              right: 15px;
+            }
           }
         }
       }
     }
+  }
+  .missing {
+    background: red;
   }
 </style>

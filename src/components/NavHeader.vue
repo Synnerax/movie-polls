@@ -22,7 +22,7 @@
       
       </section>
       <section v-else class="menu-buttons">
-        <button v-on:click="toggleGroupOptions" class="show-options-menu">Groups</button>
+        <button v-on:click="toggleGroupOptions" class="show-options-menu">Create or View</button>
         <button v-on:click="testFunc" @click="logOut" class="logout">Log Out</button>
       <section v-show="displayGroupOptions" class="group-options">
         <router-link to="/new-poll" class="link-border"> Create Poll </router-link>
@@ -89,7 +89,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .group-options {
   display: flex;

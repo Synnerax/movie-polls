@@ -30,7 +30,8 @@ export default {
       search: null,
       provider: null,
       email: "",
-      currentUser: null
+      currentUser: null,
+      pollsOrder: []
     }
   },
   components: {
@@ -40,6 +41,8 @@ export default {
 
     async fetchFeedAndGroups() {
       this.feed = await initializeData()
+      this.feed.polls.sort((a, b) => new Date(b.voteExpire) - new Date(a.voteExpire))
+
     },
     updateSearch(input) {
       this.search = input
@@ -64,6 +67,7 @@ export default {
     //all polls that should be displayed on homepage feed
     this.feed = await initializeData()
     await this.feed.polls.sort((a, b) => new Date(b.voteExpire) - new Date(a.voteExpire))
+ 
     console.log(this.feed.polls.sort((a, b) => new Date(a.voteExpire) > new Date(b.voteExpire)))
   },
   
@@ -240,4 +244,7 @@ a {
   }
 }
 
+.missing {
+  border: 2px solid red;
+}
 </style>

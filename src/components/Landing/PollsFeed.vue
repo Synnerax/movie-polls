@@ -14,7 +14,7 @@ export default {
   props: ["polls"],
   data() {
     return {
-      pollsOrder: this.polls
+      pollsOrder: []
     }
   },
   methods: {
@@ -26,14 +26,10 @@ export default {
     Poll
   },
   computed: {
-    /*sortedByVotes: function () {
-        
-      return this.pollsOrder.sort((a, b) => new Date(a.date) - new Date(b.date))
-      //return [...this.polls.filter(poll => new Date(poll.voteExpire) < new Date()), ...this.polls.filter(poll => new Date(poll.voteExpire) > new Date())]
-    }
-  */
+
   },
   mounted(){
+    this.pollsOrder = this.polls
     this.pollsOrder.sort((a, b) => new Date(a.date) - new Date(b.date))
   }
 }

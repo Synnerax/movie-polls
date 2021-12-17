@@ -67,7 +67,7 @@ export default {
 <style lang="scss">
 
 .sign-up-page {
-  height: 92vh;
+  margin-top: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;

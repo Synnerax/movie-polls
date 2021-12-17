@@ -107,16 +107,17 @@ export default {
   justify-content: center;
   align-items: center;
   .poll-voting-view {
+    margin-top: 4rem;
+    padding: 2rem;
     display: flex;
     position: relative;
     text-align: left;
     min-width: 15rem;
-    width: 75vw;
-    min-height: 19rem;
-    height: 40vw;
+    
     background: #fff;
   }
 }
+
 
 .left-section-poll-view, .right-section-poll-view {
   position: relative;
@@ -146,10 +147,19 @@ export default {
 
 .right-section-poll-view {
   position: relative;
-  height: 100%;
   flex: 1 1 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+@media only screen and (max-width: 770px) {
+  .voting {
+    .poll-voting-view {
+      flex-direction: column;
+      height: unset;
+    }
+  }
 }
 </style>

@@ -226,3 +226,14 @@ export const searchForKeyWord = async (searchWord, selectedSearch) => {
       resolve(communitys)
   })
 }
+
+
+export const deleteAllUserInfo = () => {
+  deleteUser(auth.currentUser).then(() => {
+    // User deleted.
+      this.$router.push("/")
+      }).catch((error) => {
+        // An error ocurred
+        // ...
+      });
+}
