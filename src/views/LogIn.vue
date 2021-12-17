@@ -21,13 +21,14 @@ import { logInWithEmailAndPassword, signInWithGoogle } from "../firebase-config"
 
 export default {
   name: "SignUp",
-  setup() {
-    console.log("setup() in SignUp form")
-    return {}
-  },
   props: [
     "isLoggedIn"
   ],
+  mounted(){
+    if(this.isLoggedIn) {
+      this.$router.push("/")
+    }
+  },
   data() {
     return {
       registerActive: false,
@@ -44,33 +45,29 @@ export default {
             this.emptyFields = true;
          } else {
             logInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
-            //this.$router.push({name: "Home"})
 
          }
       },
-      async googleProviderSignIn() {
-        let data = await signInWithGoogle()
-        console.log("trying to sign in with google..", data)
-        //this.$router.push({name: "Home"})
+      googleProviderSignIn() {
+        signInWithGoogle()
       }
    },
    watch: {
     isLoggedIn: function(to, from) {
     // react to route changes...
-    console.log("Checking if logged in..")
+    // redirects to home page if singed in
+    console.log("singed in here")
     if(to) {
       this.$router.push("/")
     }
-    console.log("this is TO: ", to)
-  }
-  },
+  }}
 }
 </script>
 
 <style lang="scss">
 
 .sign-up-page {
-  height: 92vh;
+  margin-top: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;

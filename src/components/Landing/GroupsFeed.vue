@@ -25,17 +25,18 @@ export default {
 <style lang="scss" scoped>
 
   .groups-feed {
-
-
+    height: 45%;
+    
     h1 {
       margin-bottom: 15px;
     }
 
     .community-links {
-      height: 100%;
+      height: 80%;
+      overflow: hidden scroll;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
 
       p {
         cursor: pointer;

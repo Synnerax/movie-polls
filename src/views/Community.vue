@@ -3,11 +3,16 @@
       <PollsFeed :polls="this.communityFeed"/>
     <section class="comunity-information">
       <div class="join-community-wrapper">       
-        <button
+        <button v-show="!isMember"
         class="join-community"
-        @click="joinCommunity(userID, this.$route.params.id)"
-      >
+        @click="memberJoin">
         Join community
+      </button>
+      <button 
+        v-show="isMember"
+        class="join-community"
+        @click="leaveFromMember">
+      Leave
       </button>
       Members: {{this.memberCount}}
       </div>
@@ -30,11 +35,8 @@
 </template>
 <script>
 
-/*
-.collection("groups")
-.where("genre", "array-contains-any", ["comedy"])
-*/
-import { joinCommunity } from "../firebase-config";
+
+import { joinCommunity, leaveCommunity, initializeData } from "../firebase-config";
 import PollsFeed from '../components/Landing/PollsFeed.vue';
 
 export default {
@@ -44,7 +46,17 @@ export default {
     PollsFeed
     },
   methods: {
-    joinCommunity,
+    async memberJoin() {
+      let updatedGroupInfo = await joinCommunity(this.userID, this.$route.params.id)
+      this.communityInfo = await updatedGroupInfo
+      this.isMember = true
+    },
+    async leaveFromMember() {
+      let updatedGroupInfo = await leaveCommunity(this.userID, this.$route.params.id)
+      this.communityInfo = await updatedGroupInfo
+      this.isMember = false
+    },
+
     pollFeed() {
       let pollList = []
       this.communitys.map((community) => {
@@ -65,13 +77,14 @@ export default {
   },
   mounted() {
     this.pollFeed()
-    
     this.communitys.forEach((community) => {
       if(community.id === this.url) {
         this.communityInfo = community
         community.members.forEach((member) => {
           if(member === this.userID) {
             this.isMember = true
+          } else {
+            this.isMember = false
           }
         })
       }
